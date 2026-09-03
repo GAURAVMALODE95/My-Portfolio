@@ -1,0 +1,162 @@
+{
+  "identity_and_concept": {
+    "developer_name": "Gaurav Malode",
+    "title": "Senior Software Developer — Fintech, Enterprise Banking, Market Data, Desktop & AI Products",
+    "visual_direction": "Signal / Surface",
+    "aesthetic_notes": "Awwwards-level dark editorial design. Deep graphite canvas with charcoal surfaces, fine hairline grid rules, numbered section identifiers (01 //, 02 //), clean mono metadata, and ultra-large display grotesk headings. Stripped of generic SaaS gradients, neon cyberpunk, or rounded-card overload. Controlled vivid amber/orange signal accent used with extreme restraint.",
+    "theme_support": "Dark mode by default (#0E0F12), with a warm-paper light mode (#F7F6F2) toggle with persistent state in localStorage."
+  },
+  "color_palette": {
+    "dark_mode": {
+      "bg_canvas": "#0E0F12",
+      "bg_surface": "#15171C",
+      "bg_surface_hover": "#1D2026",
+      "bg_card": "#181A20",
+      "border_hairline": "rgba(255, 255, 255, 0.08)",
+      "text_primary": "#F4F4F0",
+      "text_secondary": "#9E9EA8",
+      "text_muted": "#60626C"
+    },
+    "light_mode": {
+      "bg_canvas": "#F7F6F2",
+      "bg_surface": "#EFECE6",
+      "bg_surface_hover": "#E4E0D7",
+      "bg_card": "#FAF8F5",
+      "border_hairline": "rgba(0, 0, 0, 0.08)",
+      "text_primary": "#141518",
+      "text_secondary": "#5C5E66",
+      "text_muted": "#8C8E99"
+    },
+    "signal_accent": {
+      "primary": "#FF6B00",
+      "primary_hover": "#FF8800",
+      "tint_soft": "rgba(255, 107, 0, 0.12)",
+      "glow": "rgba(255, 107, 0, 0.3)"
+    }
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Cabinet Grotesk, Syne, Space Grotesk, sans-serif",
+      "class": "font-sans font-bold tracking-tight",
+      "h1_hero": "text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05]",
+      "h2_section": "text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight",
+      "h3_card": "text-xl sm:text-2xl font-semibold tracking-tight"
+    },
+    "body": {
+      "font_family": "Inter, DM Sans, Plus Jakarta Sans, sans-serif",
+      "class": "font-sans text-base leading-relaxed"
+    },
+    "metadata": {
+      "font_family": "JetBrains Mono, Space Mono, monospace",
+      "class": "font-mono text-xs uppercase tracking-wider text-[#9E9EA8]"
+    }
+  },
+  "image_urls": {
+    "portrait": "https://images.pexels.com/photos/35832429/pexels-photo-35832429.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    "mobile_app_mockup_1": "https://images.unsplash.com/photo-1620207284057-e6c6b3d1b4c0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHszfHxkYXJrJTIwbW9kZSUyMGZpbmFuY2UlMjBhcHAlMjBkYXNoYm9hcmQlMjBtb2NrdXAlMjB1aXxlbnwwfHx8fDE3ODQxMDM1MzF8MA&ixlib=rb-4.1.0&q=85",
+    "mobile_app_mockup_2": "https://images.unsplash.com/photo-1723785735443-16ffd373f398?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxkYXJrJTIwbW9kZSUyMGZpbmFuY2UlMjBhcHAlMjBkYXNoYm9hcmQlMjBtb2NrdXAlMjB1aXxlbnwwfHx8fDE3ODQxMDM1MzF8MA&ixlib=rb-4.1.0&q=85",
+    "desktop_terminal_mockup_1": "https://images.unsplash.com/photo-1720962158813-29b66b8e23e1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxkYXJrJTIwdWklMjBkYXNoYm9hcmQlMjBzb2Z0d2FyZXxlbnwwfHx8fDE3ODc4MTg0NTV8MA&ixlib=rb-4.1.0&q=85",
+    "desktop_terminal_mockup_2": "https://images.unsplash.com/photo-1720962158937-7ea890052166?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwzfHxkYXJrJTIwdWklMjBkYXNoYm9hcmQlMjBzb2Z0d2FyZXxlbnwwfHx8fDE3ODc4MTg0NTV8MA&ixlib=rb-4.1.0&q=85"
+  },
+  "routes_and_pages": [
+    {
+      "path": "/",
+      "name": "Home / Portfolio Overview",
+      "sections": [
+        "Intro Loader (1.2s session-cached curtain)",
+        "Sticky Glass Navbar + Scroll Progress Bar + Theme Toggle",
+        "Kinetic Hero (Line-by-line reveal + 3D Device Mockup Composition)",
+        "Proof-Point Ticker Marquee (1.4M+ Downloads, 200+ Countries, 5 Enterprise Banking Units, 1.5+ Years)",
+        "Selected Work Gallery (4 Editorial Cards with iPhone & PC Mockups)",
+        "Capabilities & Tech Architecture Grid",
+        "Interactive Experience Timeline",
+        "Philosophy & 3 Core Principles",
+        "Contact Section + Mailto + Resume PDF trigger",
+        "Minimal Editorial Footer"
+      ]
+    },
+    {
+      "path": "/work/musaffa",
+      "name": "Case Study: Musaffa Halal Stock Screener & Trading App",
+      "sections": [
+        "Sticky Mini-Nav (Overview, Scope, Build Architecture, Outcomes, Tech Stack)",
+        "Hero Banner with iPhone Frame Mockups",
+        "Interactive Key Metrics (1.4M+ Downloads, 200+ Countries, <80ms latency)",
+        "System Architecture & Data Pipeline",
+        "Technical Challenge & Solutions",
+        "Project Navigation (Next Project: MyBuddy)"
+      ]
+    },
+    {
+      "path": "/work/mybuddy",
+      "name": "Case Study: MyBuddy AI Knowledge Workspace",
+      "sections": [
+        "Sticky Mini-Nav (Overview, Scope, Build Architecture, Outcomes, Tech Stack)",
+        "Hero Banner with Desktop Window Mockup",
+        "AI Agent & RAG Architecture Pipeline",
+        "Local Vector Storage & Offline Processing",
+        "Project Navigation (Next Project: InfoManav Terminal)"
+      ]
+    },
+    {
+      "path": "/work/infomanav-terminal",
+      "name": "Case Study: InfoManav Institutional Market Terminal",
+      "sections": [
+        "Sticky Mini-Nav (Overview, Scope, Build Architecture, Outcomes, Tech Stack)",
+        "Hero Banner with Multi-Monitor Desktop Mockup",
+        "High-Frequency FIX Protocol Engine",
+        "Sub-Millisecond Order Routing & WebSockets",
+        "Project Navigation (Next Project: ResumeForge)"
+      ]
+    },
+    {
+      "path": "/work/resumeforge",
+      "name": "Case Study: ResumeForge AI Resume Tailoring Platform",
+      "sections": [
+        "Sticky Mini-Nav (Overview, Scope, Build Architecture, Outcomes, Tech Stack)",
+        "Hero Banner with Browser Window Preview",
+        "ATS Keyword Engine & LLM Generation",
+        "Realtime Live Preview Engine",
+        "Project Navigation (Back to Home)"
+      ]
+    },
+    {
+      "path": "/404",
+      "name": "404 Page Not Found",
+      "sections": [
+        "Retro Terminal Motif",
+        "Signal Error Indicator",
+        "Search / Back to Signal Home Trigger"
+      ]
+    }
+  ],
+  "component_design_specs": {
+    "device_mockups": {
+      "iphone": "CSS iPhone 15 Pro frame container with dynamic island top notch, sleek rounded bezel, ambient shadow, and dark mode screenshots.",
+      "desktop_pc": "macOS / Windows style browser & application container with red/yellow/green top bar dots, title header, crisp dark UI software mockups."
+    },
+    "editorial_cards": {
+      "style": "Hairline 1px border cards (border-white/10 dark, border-black/10 light), subtle background tint on hover, amber status badges, top mono project index (01 //, 02 //)."
+    },
+    "sticky_navigation": {
+      "style": "Glassmorphism navigation (backdrop-blur-md bg-[#0E0F12]/85 dark, bg-[#F7F6F2]/85 light), non-transparent border-b, top glowing amber scroll progress bar, theme switcher, mobile sheet drawer."
+    },
+    "contact_form": {
+      "style": "Minimalist underline/boxed inputs, active amber focus rings, submit state with Sonner toast notification, direct mailto fallback link."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Install required dependencies like lenis (@studio-freight/lenis or lenis), framer-motion, lucide-react, sonner if missing.",
+    "Ensure all interactive elements have explicit data-testid attributes (e.g. data-testid='nav-theme-toggle', data-testid='contact-submit-btn').",
+    "Maintain strict dark/light mode consistency across all pages and routes.",
+    "Never use raw transparent backgrounds for sticky headers or dropdowns—always add backdrop-blur and semi-opaque background color.",
+    "For case study pages, implement smooth sticky mini-nav jumps to section IDs (#overview, #scope, #build, #outcomes, #stack).",
+    "Ensure full accessibility and reduced motion options via Framer Motion's useReducedMotion hook."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": {
+    "design_quality": "High-craft Awwwards-level visual direction. Deep contrast, hairline grid borders, strict spacing.",
+    "button_styles": "Pill or sharp rectangular buttons with subtle hover lift and signal amber highlight.",
+    "toast_library": "Use Sonner for toast notifications.",
+    "test_ids": "MUST include data-testid attribute on all interactive elements in kebab-case."
+  }
+}

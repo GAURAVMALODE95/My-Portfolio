@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" class="dark">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#0E0F12" />
+        <meta
+            name="description"
+            content="Gaurav Malode — Software Developer building secure fintech, enterprise banking, market-data, desktop, and AI products."
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+            href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800,900&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <script>
+            (function () {
+                try {
+                    var t = localStorage.getItem("gm-theme");
+                    if (t !== "dark" && t !== "light") {
+                        t = window.matchMedia("(prefers-color-scheme: light)").matches
+                            ? "light"
+                            : "dark";
+                    }
+                    var d = document.documentElement;
+                    d.classList.remove("dark", "light");
+                    d.classList.add(t);
+                    d.style.backgroundColor = t === "dark" ? "#0E0F12" : "#F7F6F2";
+                } catch (e) {
+                    document.documentElement.classList.add("dark");
+                }
+            })();
+        </script>
+        <title>Gaurav Malode — Software Developer</title>
+        <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
+        <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
+    </head>
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+    </body>
+</html>
