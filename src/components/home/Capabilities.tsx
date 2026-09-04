@@ -12,7 +12,7 @@ export function Capabilities() {
     <section id="capabilities" className="scroll-mt-24 border-t border-hairline py-24 sm:py-32" aria-label="Capabilities">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionLabel index="03" title="Capabilities" />
-        <h2 className="mt-10 font-display text-4xl font-bold tracking-[-0.035em] sm:text-5xl lg:text-6xl">
+        <h2 className="mt-10 font-display text-4xl font-bold leading-[1.15] tracking-[-0.035em] sm:text-5xl lg:text-6xl">
           <MaskedLines lines={["Tools of the trade,", <>organised by <em className="font-serif font-normal italic text-signal">intent.</em></>]} />
         </h2>
 

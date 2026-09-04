@@ -28,7 +28,7 @@ export function Footer() {
               data-testid="footer-resume-download"
               className="group mt-8 inline-flex items-center gap-2 border border-hairline px-4 py-2.5 font-mono text-[11px] uppercase tracking-[0.18em] text-sub transition-colors hover:border-ink hover:text-ink"
             >
-              Résumé (PDF)
+              Resume (PDF)
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
             </a>
           </div>

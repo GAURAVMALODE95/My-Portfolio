@@ -161,7 +161,7 @@ export default function CaseStudy() {
         <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.3em] text-faint">
           <span className="text-signal">{project.index}</span> — {project.domain}
         </p>
-        <h1 className="mt-5 font-display text-5xl font-bold leading-[0.96] tracking-[-0.04em] sm:text-7xl lg:text-[6.5rem]">
+        <h1 className="mt-5 font-display text-5xl font-bold leading-[1.08] tracking-[-0.04em] sm:text-7xl lg:text-[6.5rem]">
           <MaskedLines lines={[project.product]} />
         </h1>
         <FadeUp delay={0.25}>

@@ -14,7 +14,7 @@ export function Philosophy() {
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint lg:col-span-3 lg:pt-3">
             How I work
           </p>
-          <h2 className="font-display text-3xl font-medium leading-[1.12] tracking-[-0.025em] sm:text-4xl lg:col-span-9 lg:text-[3rem]">
+          <h2 className="font-display text-3xl font-medium leading-[1.3] tracking-[-0.025em] sm:text-4xl lg:col-span-9 lg:text-[3rem]">
             <MaskedLines
               lines={[
                 "I enjoy the hard middle of product engineering:",

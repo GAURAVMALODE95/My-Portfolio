@@ -13,11 +13,14 @@ export function MaskedLines({
   className = "",
   lineClassName = "",
   delay = 0,
+  compact = false,
 }: {
   lines: ReactNode[];
   className?: string;
   lineClassName?: string;
   delay?: number;
+  /** Skip extra glyph padding — use on tight display headlines */
+  compact?: boolean;
 }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLSpanElement>(null);
@@ -25,9 +28,16 @@ export function MaskedLines({
   return (
     <span ref={ref} className={`block ${className}`}>
       {lines.map((line, i) => (
-        <span key={i} className="block overflow-hidden">
+        <span
+          key={i}
+          className={
+            compact
+              ? "block overflow-hidden"
+              : "block overflow-hidden py-[0.2em] -my-[0.05em]"
+          }
+        >
           <motion.span
-            className={`block will-change-transform ${lineClassName}`}
+            className={`block will-change-transform ${compact ? "" : "pr-[0.06em]"} ${lineClassName}`}
             initial={reduce ? false : { y: "112%" }}
             animate={inView ? { y: 0 } : undefined}
             transition={{ duration: 0.85, ease: EASE, delay: delay + i * 0.09 }}
@@ -73,14 +83,17 @@ export function SectionLabel({
   title: string;
 }) {
   return (
-    <div className="flex items-center gap-4" data-testid={`section-label-${title.toLowerCase().replace(/\s+/g, "-")}`}>
-      <span className="font-mono text-[11px] tracking-[0.2em] text-signal">
+    <div
+      className="flex items-center gap-4 sm:gap-5"
+      data-testid={`section-label-${title.toLowerCase().replace(/\s+/g, "-")}`}
+    >
+      <span className="shrink-0 font-mono text-sm font-semibold tracking-[0.16em] text-signal sm:text-base">
         {index}
       </span>
-      <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-faint">
+      <span className="shrink-0 font-mono text-xs font-semibold uppercase tracking-[0.28em] text-ink sm:text-[13px]">
         {title}
       </span>
-      <span className="h-px flex-1 bg-hairline" aria-hidden="true" />
+      <span className="h-px flex-1 bg-ink/20" aria-hidden="true" />
     </div>
   );
 }

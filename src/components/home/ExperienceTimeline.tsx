@@ -177,7 +177,7 @@ export function ExperienceTimeline() {
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionLabel index="02" title="Experience" />
         <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
-          <h2 className="font-display text-4xl font-bold tracking-[-0.035em] sm:text-5xl lg:col-span-8 lg:text-6xl">
+          <h2 className="font-display text-4xl font-bold leading-[1.15] tracking-[-0.035em] sm:text-5xl lg:col-span-8 lg:text-6xl">
             <MaskedLines lines={["A short history", <>of <em className="font-serif font-normal italic text-signal">shipping.</em></>]} />
           </h2>
           <FadeUp delay={0.2} className="lg:col-span-4">

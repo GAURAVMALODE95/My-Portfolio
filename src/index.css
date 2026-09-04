@@ -8,9 +8,9 @@
     --surface: 239 236 230;
     --surface-2: 228 224 215;
     --ink: 20 21 24;
-    --sub: 71 73 82;
-    --faint: 107 109 120;
-    --hairline: rgba(20, 21, 24, 0.12);
+    --sub: 55 57 65;
+    --faint: 66 68 76;
+    --hairline: rgba(20, 21, 24, 0.14);
     --signal: 224 92 0;
     --signal-hover: 190 76 0;
 
@@ -25,7 +25,7 @@
     --secondary: 40 12% 92%;
     --secondary-foreground: 225 9% 9%;
     --muted: 40 12% 92%;
-    --muted-foreground: 225 8% 34%;
+    --muted-foreground: 225 8% 28%;
     --accent: 40 12% 92%;
     --accent-foreground: 225 9% 9%;
     --destructive: 0 84.2% 60.2%;
@@ -34,38 +34,6 @@
     --input: 40 10% 86%;
     --ring: 24 100% 44%;
     --radius: 0.25rem;
-}
-
-.dark {
-    --canvas: 14 15 18;
-    --surface: 21 23 28;
-    --surface-2: 29 32 38;
-    --ink: 244 244 240;
-    --sub: 158 158 168;
-    --faint: 96 98 108;
-    --hairline: rgba(255, 255, 255, 0.08);
-    --signal: 255 107 0;
-    --signal-hover: 255 136 0;
-
-    --background: 225 12% 6%;
-    --foreground: 60 5% 95%;
-    --card: 225 12% 6%;
-    --card-foreground: 60 5% 95%;
-    --popover: 225 14% 8%;
-    --popover-foreground: 60 5% 95%;
-    --primary: 24 100% 50%;
-    --primary-foreground: 225 12% 6%;
-    --secondary: 225 10% 12%;
-    --secondary-foreground: 60 5% 95%;
-    --muted: 225 10% 12%;
-    --muted-foreground: 225 6% 62%;
-    --accent: 225 10% 12%;
-    --accent-foreground: 60 5% 95%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 225 10% 14%;
-    --input: 225 10% 14%;
-    --ring: 24 100% 50%;
 }
 
 @layer base {
@@ -78,6 +46,10 @@
     body {
         @apply bg-canvas text-ink font-body antialiased;
         font-feature-settings: "ss01" on;
+    }
+    /* Uppercase mono labels (ROLE, section tags, nav) — clearer without going bold */
+    .font-mono.uppercase {
+        font-weight: 500;
     }
     ::selection {
         background: rgb(var(--signal));
@@ -109,8 +81,17 @@
 
 /* ---- Custom cursor (fine pointers only) ---- */
 @media (pointer: fine) {
-    html.has-cursor,
-    html.has-cursor * {
+    /* Avoid `*` — it forces style recalc on every node and feels like cursor lag */
+    html.has-cursor {
+        cursor: none !important;
+    }
+    html.has-cursor a,
+    html.has-cursor button,
+    html.has-cursor [role="button"],
+    html.has-cursor label,
+    html.has-cursor summary,
+    html.has-cursor select,
+    html.has-cursor .group {
         cursor: none !important;
     }
     html.has-cursor input,
@@ -118,6 +99,80 @@
     html.has-cursor select {
         cursor: auto !important;
     }
+}
+
+.gm-cursor {
+    transform: translate3d(-200px, -200px, 0);
+    will-change: transform;
+    contain: layout style;
+}
+
+.gm-cursor-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: rgb(var(--ink));
+    color: #fff;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition:
+        width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        height 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+    will-change: width, height, opacity;
+}
+
+.gm-cursor[data-variant="default"] .gm-cursor-dot {
+    opacity: 1;
+}
+
+.gm-cursor[data-variant="link"] .gm-cursor-dot {
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+    background: transparent;
+    border: 1px solid rgb(var(--ink));
+}
+
+.gm-cursor[data-variant="view"] .gm-cursor-dot {
+    width: 88px;
+    height: 88px;
+    opacity: 1;
+    background: rgb(var(--signal));
+}
+
+.gm-cursor[data-variant="hidden"] .gm-cursor-dot {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.gm-cursor-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.gm-work-preview {
+    transform-origin: center center;
+    transition:
+        opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+    contain: layout paint;
+}
+
+.gm-work-preview-img {
+    transition:
+        opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
 }
 
 /* ---- Sweep-fill button ---- */
@@ -139,26 +194,43 @@
     transform: scaleY(1);
 }
 
-/* ---- Editorial underline input ---- */
+/* ---- Contact form fields ---- */
 .field {
     width: 100%;
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid var(--hairline);
-    padding: 0.9rem 0;
-    font-size: 1rem;
+    margin-top: 0.5rem;
+    background: rgb(var(--canvas));
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
     color: rgb(var(--ink));
-    transition: border-color 0.3s;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 .field::placeholder {
     color: rgb(var(--faint));
 }
+.field:hover {
+    border-color: rgba(20, 21, 24, 0.28);
+}
 .field:focus {
     outline: none;
-    border-bottom-color: rgb(var(--signal));
+    border-color: rgb(var(--signal));
+    box-shadow: 0 0 0 3px rgb(var(--signal) / 0.14);
 }
 .field[aria-invalid="true"] {
-    border-bottom-color: #e5484d;
+    border-color: #e5484d;
+    box-shadow: 0 0 0 3px rgb(229 72 77 / 0.12);
+}
+textarea.field {
+    min-height: 8.5rem;
+    resize: vertical;
+}
+select.field {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23383A42' stroke-width='1.5' stroke-linecap='square'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
 }
 
 /* ---- Grain overlay ---- */

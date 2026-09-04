@@ -20,7 +20,7 @@ interface Errors {
   message?: string;
 }
 
-const LABEL = "block font-mono text-[10px] uppercase tracking-[0.25em] text-faint";
+const LABEL = "block font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-sub";
 
 function FieldError({ id, text }: { id: string; text?: string }) {
   if (!text) return null;
@@ -92,7 +92,7 @@ export function ContactSection() {
     <section id="contact" className="scroll-mt-24 border-t border-hairline py-24 sm:py-32" aria-label="Contact">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionLabel index="05" title="Contact" />
-        <h2 className="mt-10 font-display text-4xl font-bold tracking-[-0.035em] sm:text-5xl lg:text-6xl">
+        <h2 className="mt-10 font-display text-4xl font-bold leading-[1.15] tracking-[-0.035em] sm:text-5xl lg:text-6xl">
           <MaskedLines
             lines={[
               "Have a difficult product problem?",
@@ -119,8 +119,16 @@ export function ContactSection() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={onSubmit} noValidate data-testid="contact-form">
-                <div className="grid gap-8 sm:grid-cols-2">
+              <form
+                onSubmit={onSubmit}
+                noValidate
+                data-testid="contact-form"
+                className="border border-hairline bg-surface/60 p-5 sm:p-8"
+              >
+                <p className="mb-8 font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-ink">
+                  Send a message
+                </p>
+                <div className="grid gap-6 sm:grid-cols-2">
                   <div>
                     <label htmlFor="contact-name" className={LABEL}>01 — Name</label>
                     <input
@@ -155,14 +163,14 @@ export function ContactSection() {
                   </div>
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-6">
                   <label htmlFor="contact-topic" className={LABEL}>03 — Topic</label>
                   <select
                     id="contact-topic"
                     data-testid="contact-topic-select"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
-                    className="field cursor-pointer appearance-none bg-canvas"
+                    className="field cursor-pointer appearance-none"
                   >
                     {TOPICS.map((t) => (
                       <option key={t} value={t}>{t}</option>
@@ -170,7 +178,7 @@ export function ContactSection() {
                   </select>
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-6">
                   <label htmlFor="contact-message" className={LABEL}>04 — Message</label>
                   <textarea
                     id="contact-message"
@@ -178,15 +186,15 @@ export function ContactSection() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Tell me about the problem you're trying to solve…"
-                    rows={4}
+                    rows={5}
                     aria-invalid={!!errors.message}
                     aria-describedby={errors.message ? "contact-message-error" : undefined}
-                    className="field resize-y"
+                    className="field"
                   />
                   <FieldError id="contact-message-error" text={errors.message} />
                 </div>
 
-                <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center">
+                <div className="mt-8 flex flex-col gap-5 border-t border-hairline pt-6 sm:flex-row sm:items-center">
                   <Cta type="submit" testId="contact-submit-btn" icon={ArrowUpRight} disabled={status === "sending"}>
                     {status === "sending" ? "Sending…" : "Send message"}
                   </Cta>
@@ -235,7 +243,7 @@ export function ContactSection() {
               data-testid="contact-resume-download"
               className="group mt-8 flex items-center justify-between border border-hairline px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-sub transition-colors hover:border-ink hover:text-ink"
             >
-              Download résumé (PDF)
+              Download resume (PDF)
               <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
             </a>
           </FadeUp>

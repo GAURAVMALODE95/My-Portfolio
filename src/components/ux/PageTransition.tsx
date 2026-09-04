@@ -9,10 +9,13 @@ import {
   type ReactNode,
 } from "react";
 import { EASE } from "@/components/motion/Reveal";
+import { PROFILE } from "@/data/site";
 
 const COLS = 4;
-const DURATION = 0.5;
-const STAGGER = 0.08;
+const DURATION = 0.85;
+const STAGGER = 0.14;
+const HOLD_MS = 180;
+const INTRO_HOLD_MS = 2000;
 
 interface Ctx {
   runTransition: (action?: () => void) => void;
@@ -72,7 +75,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
       setBusy(true);
       await controls.start("cover");
       action?.();
-      await new Promise((r) => setTimeout(r, 90));
+      await new Promise((r) => setTimeout(r, HOLD_MS));
       await controls.start("reveal");
       controls.set("hidden");
       setBusy(false);
@@ -94,7 +97,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
       await controls.start("reveal");
       controls.set("hidden");
       setBusy(false);
-    }, 1150);
+    }, INTRO_HOLD_MS);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -118,7 +121,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
               variants={variants}
               initial={initialVariant}
               animate={controls}
-              className="h-full border-r border-black/[0.04] bg-canvas last:border-r-0 dark:border-white/[0.04]"
+              className="h-full border-r border-black/[0.04] bg-canvas last:border-r-0"
             />
           ))}
         </div>
@@ -126,34 +129,21 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         <AnimatePresence>
           {intro && (
             <motion.div
-              className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"
-              exit={{ opacity: 0, y: -24 }}
-              transition={{ duration: 0.4, ease: EASE }}
+              className="pointer-events-none absolute inset-0 flex items-center justify-center px-6"
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: EASE }}
             >
-              <motion.span
-                className="h-px w-40 origin-left bg-signal"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.5, ease: EASE }}
-              />
-              <div className="mt-6 overflow-hidden">
+              <div className="overflow-hidden text-center">
                 <motion.p
-                  className="font-display text-3xl font-bold uppercase tracking-[-0.03em] text-ink sm:text-5xl"
-                  initial={{ y: "115%" }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
+                  className="font-display text-[clamp(2.25rem,7vw,4.75rem)] font-medium leading-[1.05] tracking-[-0.035em] text-ink"
+                  initial={{ y: "110%", opacity: 0.4 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.95, ease: EASE, delay: 0.15 }}
+                  data-testid="splash-name"
                 >
-                  Welcome
+                  {PROFILE.name}
                 </motion.p>
               </div>
-              <motion.p
-                className="mt-4 font-mono text-[11px] uppercase tracking-[0.35em] text-faint"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.55, duration: 0.4 }}
-              >
-                Gaurav Malode — Software Developer
-              </motion.p>
             </motion.div>
           )}
         </AnimatePresence>

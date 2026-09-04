@@ -12,7 +12,9 @@ import { scrollToId } from "@/lib/lenis";
 function Meta({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="font-mono text-[11px] uppercase tracking-[0.22em] text-faint">{label}</dt>
+      <dt className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-sub">
+        {label}
+      </dt>
       <dd className="mt-2 text-sm font-medium leading-snug text-ink">{value}</dd>
     </div>
   );
@@ -40,29 +42,14 @@ export function Hero() {
       aria-label="Introduction"
     >
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
-        <motion.div
-          {...enter(0.1)}
-          className="flex items-center justify-between border-b border-hairline pb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-faint"
-          data-testid="hero-eyebrow"
-        >
-          <span>Portfolio — 2026</span>
-          <span className="hidden text-sub sm:inline">{PROFILE.location}</span>
-          <span className="flex items-center gap-2 text-ink">
-            <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal" />
-            </span>
-            Open to work
-          </span>
-        </motion.div>
-
-        <motion.div style={{ opacity: fade }} className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-12 lg:gap-10">
+        <motion.div style={{ opacity: fade }} className="mt-6 grid gap-10 lg:mt-10 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-8">
-            <h1 className="font-display text-[clamp(1.9rem,4.6vw,4.1rem)] font-semibold leading-[1.06] tracking-[-0.02em] text-ink">
+            <h1 className="font-display text-[clamp(1.9rem,4.6vw,4.1rem)] font-semibold leading-[1.08] tracking-[-0.02em] text-ink">
               <MaskedLines
-                delay={0.2}
+                compact
+                delay={0.15}
                 lines={[
-                  <>Secure financial software —</>,
+                  <>Secure financial software -</>,
                   <>
                     from the{" "}
                     <span className="italic font-medium text-signal">mobile screen</span>
@@ -93,7 +80,7 @@ export function Hero() {
                 Selected work
               </Cta>
               <Cta testId="hero-cta-resume" icon={ArrowUpRight} variant="ghost" href={PROFILE.resumePath} download>
-                Résumé (PDF)
+                Resume (PDF)
               </Cta>
             </motion.div>
           </div>
@@ -107,7 +94,7 @@ export function Hero() {
           <Meta label="Role" value={PROFILE.role} />
           <Meta label="Company" value={PROFILE.company} />
           <Meta label="Focus" value={PROFILE.focus.slice(0, 3).join(" · ")} />
-          <Meta label="Based in" value={PROFILE.location} />
+          <Meta label="Domain" value="Fintech · Banking" />
         </motion.dl>
       </div>
 
@@ -130,6 +117,7 @@ export function Hero() {
           aria-label={PROFILE.name}
         >
           <MaskedLines
+            compact
             delay={0.4}
             lines={
               wide

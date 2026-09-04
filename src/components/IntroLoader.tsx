@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { EASE } from "@/components/motion/Reveal";
+import { PROFILE } from "@/data/site";
 
 export function IntroLoader() {
   const [visible, setVisible] = useState<boolean>(() => {
@@ -16,7 +17,7 @@ export function IntroLoader() {
 
   useEffect(() => {
     if (!visible) return;
-    const t = setTimeout(() => dismiss(), 1400);
+    const t = setTimeout(() => dismiss(), 1600);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
@@ -35,37 +36,23 @@ export function IntroLoader() {
       {visible && (
         <motion.div
           data-testid="intro-loader"
-          className="fixed inset-0 z-[100] flex cursor-pointer flex-col items-center justify-center bg-canvas"
+          className="fixed inset-0 z-[100] flex cursor-pointer items-center justify-center bg-canvas px-6"
           onClick={dismiss}
           role="presentation"
           aria-hidden="true"
-          exit={{ y: "-100%" }}
+          exit={{ opacity: 0 }}
           transition={{ duration: 0.45, ease: EASE }}
         >
-          <motion.div
-            className="h-px w-44 origin-left bg-signal"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.5, ease: EASE }}
-          />
-          <div className="mt-7 overflow-hidden">
+          <div className="overflow-hidden text-center">
             <motion.p
-              className="font-display text-3xl font-black uppercase tracking-[-0.04em] sm:text-5xl"
-              initial={{ y: "112%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.6, ease: EASE, delay: 0.25 }}
+              className="font-display text-[clamp(2.25rem,7vw,4.75rem)] font-medium leading-[1.05] tracking-[-0.035em] text-ink"
+              initial={{ y: "110%", opacity: 0.4 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.85, ease: EASE, delay: 0.2 }}
             >
-              Gaurav Malode
+              {PROFILE.name}
             </motion.p>
           </div>
-          <motion.p
-            className="mt-4 font-mono text-[10px] uppercase tracking-[0.35em] text-faint"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.65, duration: 0.4 }}
-          >
-            Software Developer — Fintech · Mobile · Desktop
-          </motion.p>
         </motion.div>
       )}
     </AnimatePresence>

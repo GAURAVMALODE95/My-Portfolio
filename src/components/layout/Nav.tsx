@@ -6,7 +6,7 @@ import {
   useScroll,
   useSpring,
 } from "framer-motion";
-import { ArrowUpRight, Moon, Sun } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { EASE } from "@/components/motion/Reveal";
@@ -14,7 +14,6 @@ import { ScrambleText } from "@/components/ux/ScrambleText";
 import { usePageTransition } from "@/components/ux/PageTransition";
 import { PROFILE } from "@/data/site";
 import { scrollToId } from "@/lib/lenis";
-import { useTheme } from "@/theme/ThemeProvider";
 
 const LINKS = [
   { id: "work", label: "Work" },
@@ -37,7 +36,6 @@ function ScrollProgress() {
 }
 
 export function Nav() {
-  const { theme, toggle } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const { runTransition } = usePageTransition();
@@ -133,31 +131,13 @@ export function Nav() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              type="button"
-              data-testid="nav-theme-toggle"
-              onClick={toggle}
-              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-              className="flex h-9 w-9 items-center justify-center border border-hairline text-sub transition-colors hover:border-ink hover:text-ink"
-            >
-              <motion.span
-                key={theme}
-                initial={reduce ? false : { rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                transition={{ duration: 0.4 }}
-                className="flex"
-              >
-                {theme === "dark" ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
-              </motion.span>
-            </button>
-
             <a
               href={PROFILE.resumePath}
               download
               data-testid="nav-resume-download"
               className="group hidden h-9 items-center gap-2 border border-hairline px-4 font-mono text-[11px] uppercase tracking-[0.18em] text-sub transition-colors hover:border-ink hover:text-ink sm:flex"
             >
-              Résumé
+              Resume
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
             </a>
 
@@ -216,7 +196,7 @@ export function Nav() {
                   data-testid="nav-mobile-resume-download"
                   className="flex items-center justify-between border border-ink bg-ink px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-canvas"
                 >
-                  Download résumé (PDF)
+                  Download resume (PDF)
                   <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                 </a>
                 <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint">

@@ -1,15 +1,8 @@
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-  useVelocity,
-} from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { EASE, FadeUp, MaskedLines, SectionLabel } from "@/components/motion/Reveal";
+import { FadeUp, MaskedLines, SectionLabel } from "@/components/motion/Reveal";
 import { usePageTransition } from "@/components/ux/PageTransition";
 import { PROJECTS, type Project } from "@/data/projects";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -56,6 +49,7 @@ function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }
           src={project.images.primary}
           alt={project.imageAlts.primary}
           loading="lazy"
+          decoding="async"
           className="aspect-[16/10] w-full border border-hairline object-cover"
         />
         <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-sub">
@@ -66,66 +60,163 @@ function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }
   );
 }
 
-function Preview({ hover, x, y }: { hover: number | null; x: ReturnType<typeof useSpring>; y: ReturnType<typeof useSpring> }) {
-  const rotate = useTransform(useVelocity(x), [-2000, 2000], [-5, 5]);
-  const active = hover !== null ? PROJECTS[hover] : null;
+function Preview({ hover }: { hover: number | null }) {
+  const shellRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const outcomeRef = useRef<HTMLSpanElement>(null);
+  const indexRef = useRef<HTMLSpanElement>(null);
+  const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const target = useRef({ x: 0, y: 0 });
+  const current = useRef({ x: 0, y: 0, vx: 0 });
+  const activeRef = useRef<number | null>(null);
+  const rafRef = useRef(0);
+  const running = useRef(false);
+  const live = useRef(false);
+  const startRef = useRef<() => void>(() => undefined);
+
+  useEffect(() => {
+    live.current = hover !== null;
+  }, [hover]);
+
+  useEffect(() => {
+    const tick = () => {
+      const shell = shellRef.current;
+      if (!shell || !live.current) {
+        running.current = false;
+        return;
+      }
+      const t = target.current;
+      const c = current.current;
+      const dx = t.x - c.x;
+      const dy = t.y - c.y;
+      c.x += dx * 0.18;
+      c.y += dy * 0.18;
+      c.vx += (dx - c.vx) * 0.12;
+      const rot = Math.max(-5, Math.min(5, c.vx * 0.02));
+      shell.style.transform = `translate3d(${c.x}px, ${c.y}px, 0) rotate(${rot}deg)`;
+
+      if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1 || Math.abs(c.vx) > 0.1) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        running.current = false;
+      }
+    };
+
+    const start = () => {
+      if (running.current) return;
+      running.current = true;
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    startRef.current = start;
+
+    const onMove = (e: PointerEvent) => {
+      target.current.x = e.clientX;
+      target.current.y = e.clientY;
+      if (live.current) start();
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    const prev = activeRef.current;
+    activeRef.current = hover;
+
+    if (hover === null) {
+      card.style.opacity = "0";
+      card.style.transform = "translate(-50%, -50%) scale(0.7)";
+      return;
+    }
+
+    if (prev === null) {
+      current.current.x = target.current.x;
+      current.current.y = target.current.y;
+      current.current.vx = 0;
+      const shell = shellRef.current;
+      if (shell) {
+        shell.style.transform = `translate3d(${target.current.x}px, ${target.current.y}px, 0)`;
+      }
+      startRef.current();
+    }
+
+    card.style.opacity = "1";
+    card.style.transform = "translate(-50%, -50%) scale(1)";
+
+    imgRefs.current.forEach((img, i) => {
+      if (!img) return;
+      const on = i === hover;
+      img.style.opacity = on ? "1" : "0";
+      img.style.transform = on ? "scale(1)" : "scale(1.08)";
+    });
+
+    const project = PROJECTS[hover];
+    if (outcomeRef.current) outcomeRef.current.textContent = project.cardOutcome;
+    if (indexRef.current) indexRef.current.textContent = project.index;
+  }, [hover]);
+
+  useEffect(() => {
+    PROJECTS.forEach((p) => {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = p.images.primary;
+    });
+  }, []);
+
   return (
-    <motion.div
-      className="pointer-events-none absolute left-0 top-0 z-20 w-[22rem]"
-      style={{ x, y, rotate }}
+    <div
+      ref={shellRef}
+      className="pointer-events-none fixed left-0 top-0 z-20 w-[22rem] will-change-transform"
       aria-hidden="true"
       data-testid="work-preview"
     >
-      <motion.div
-        className="-translate-x-1/2 -translate-y-1/2 overflow-hidden border border-hairline bg-surface shadow-[0_40px_90px_-30px_rgba(0,0,0,0.55)]"
-        animate={{ scale: active ? 1 : 0.7, opacity: active ? 1 : 0 }}
-        transition={{ type: "spring", stiffness: 260, damping: 26 }}
+      <div
+        ref={cardRef}
+        className="gm-work-preview overflow-hidden border border-hairline bg-surface shadow-[0_40px_90px_-30px_rgba(0,0,0,0.55)]"
+        style={{ opacity: 0, transform: "translate(-50%, -50%) scale(0.7)" }}
       >
         <div className="relative aspect-[4/3] bg-surface2">
           {PROJECTS.map((p, i) => (
-            <motion.img
+            <img
               key={p.slug}
+              ref={(el) => {
+                imgRefs.current[i] = el;
+              }}
               src={p.images.primary}
               alt=""
-              className="absolute inset-0 h-full w-full object-cover"
-              animate={{ opacity: hover === i ? 1 : 0, scale: hover === i ? 1 : 1.08 }}
-              transition={{ duration: 0.45, ease: EASE }}
+              decoding="async"
+              draggable={false}
+              className="gm-work-preview-img absolute inset-0 h-full w-full object-cover"
+              style={{ opacity: 0, transform: "scale(1.08)" }}
             />
           ))}
         </div>
         <div className="flex items-center justify-between gap-4 border-t border-hairline px-3 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
-          <span className="truncate">{active?.cardOutcome}</span>
-          <span className="shrink-0 text-signal">{active?.index}</span>
+          <span ref={outcomeRef} className="truncate" />
+          <span ref={indexRef} className="shrink-0 text-signal" />
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
 export function WorkGallery() {
   const [hover, setHover] = useState<number | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const fine = useMediaQuery("(pointer: fine)");
   const wide = useMediaQuery("(min-width: 1024px)");
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 220, damping: 28, mass: 0.6 });
-  const sy = useSpring(y, { stiffness: 220, damping: 28, mass: 0.6 });
-
-  const onMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    x.set(e.clientX - r.left);
-    y.set(e.clientY - r.top);
-  };
 
   return (
     <section id="work" className="scroll-mt-24 py-24 sm:py-32" aria-label="Selected work">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionLabel index="01" title="Selected work" />
         <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
-          <h2 className="font-display text-4xl font-bold tracking-[-0.035em] sm:text-5xl lg:col-span-8 lg:text-6xl">
+          <h2 className="font-display text-4xl font-bold leading-[1.15] tracking-[-0.035em] sm:text-5xl lg:col-span-8 lg:text-6xl">
             <MaskedLines lines={["Four products,", <>shipped to <em className="font-serif font-normal italic text-signal">real users.</em></>]} />
           </h2>
           <FadeUp delay={0.2} className="lg:col-span-4">
@@ -145,9 +236,7 @@ export function WorkGallery() {
         </div>
 
         <div
-          ref={ref}
           className="relative mt-10 lg:mt-0"
-          onPointerMove={onMove}
           onPointerLeave={() => setHover(null)}
           onBlur={() => setHover(null)}
           data-testid="work-index"
@@ -155,7 +244,7 @@ export function WorkGallery() {
           {PROJECTS.map((p, i) => (
             <WorkRow key={p.slug} project={p} onEnter={() => setHover(i)} />
           ))}
-          {fine && wide && !reduce && <Preview hover={hover} x={sx} y={sy} />}
+          {fine && wide && !reduce && <Preview hover={hover} />}
         </div>
       </div>
     </section>

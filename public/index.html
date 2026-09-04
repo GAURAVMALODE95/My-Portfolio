@@ -46,17 +46,12 @@
         <script>
             (function () {
                 try {
-                    var t = localStorage.getItem("gm-theme");
-                    if (t !== "dark" && t !== "light") {
-                        t = "light";
-                    }
-                    var d = document.documentElement;
-                    d.classList.remove("dark", "light");
-                    d.classList.add(t);
-                    d.style.backgroundColor = t === "dark" ? "#0E0F12" : "#F7F6F2";
-                } catch (e) {
-                    document.documentElement.classList.add("light");
-                }
+                    localStorage.removeItem("gm-theme");
+                } catch (e) {}
+                var d = document.documentElement;
+                d.classList.remove("dark");
+                d.classList.add("light");
+                d.style.backgroundColor = "#F7F6F2";
             })();
         </script>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
