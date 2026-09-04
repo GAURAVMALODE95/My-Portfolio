@@ -4,7 +4,6 @@ import { Capabilities } from "@/components/home/Capabilities";
 import { ContactSection } from "@/components/home/ContactSection";
 import { ExperienceTimeline } from "@/components/home/ExperienceTimeline";
 import { Hero } from "@/components/home/Hero";
-import { Philosophy } from "@/components/home/Philosophy";
 import { Stats } from "@/components/home/Stats";
 import { WorkGallery } from "@/components/home/WorkGallery";
 import { useSeo } from "@/hooks/useSeo";
@@ -14,7 +13,8 @@ export default function Home() {
   const location = useLocation();
   useSeo(
     "Gaurav Malode — Software Developer",
-    "Secure financial software, from the mobile screen to the market-data layer. Flutter · React Native · React · Node.js · FastAPI.",
+    "Gaurav Malode is a software developer in Nashik, India, building secure financial software — Flutter and React Native apps for fintech and enterprise banking, desktop market terminals, and Node.js / FastAPI services. 1.4M+ app downloads.",
+    { path: "/" },
   );
 
   useEffect(() => {
@@ -31,7 +31,6 @@ export default function Home() {
       <WorkGallery />
       <ExperienceTimeline />
       <Capabilities />
-      <Philosophy />
       <ContactSection />
     </>
   );

@@ -233,6 +233,18 @@ select.field {
     padding-right: 2.5rem;
 }
 
+/* ---- Page-transition shutter (lined cream, like ruled paper) ---- */
+.gm-shutter {
+    background-color: #f3f1e6;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        rgb(40 38 32 / 0.12) 0px,
+        rgb(40 38 32 / 0.12) 1px,
+        #f3f1e6 1px,
+        #f3f1e6 5px
+    );
+}
+
 /* ---- Grain overlay ---- */
 .grain-overlay {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");

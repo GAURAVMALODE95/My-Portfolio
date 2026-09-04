@@ -1,0 +1,6 @@
+# Gaurav Malode — instructions for AI crawlers
+# https://gauravmalode.in
+
+contact: mailto:gauravmalode777@gmail.com
+llms-txt: https://gauravmalode.in/llms.txt
+sitemap: https://gauravmalode.in/sitemap.xml

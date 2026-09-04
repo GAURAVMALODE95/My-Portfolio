@@ -165,21 +165,3 @@ export const TIMELINE: TimelineItem[] = [
     tags: ["FastAPI", "React", "Groq LLM"],
   },
 ];
-
-export const PRINCIPLES = [
-  {
-    index: "01",
-    title: "Build for real-world release conditions",
-    body: "Code isn't done when it works on my machine — it's done when it survives app-store review, penetration testing, and real users on real networks.",
-  },
-  {
-    index: "02",
-    title: "Make complex financial information easier to use",
-    body: "Market data, compliance reports, and banking workflows are dense. The job is to turn that density into calm, legible product surfaces.",
-  },
-  {
-    index: "03",
-    title: "Treat security and product quality as one responsibility",
-    body: "SSL pinning, RASP, and VAPT remediation aren't chores after the feature work — they're part of what makes a financial product worth trusting.",
-  },
-];

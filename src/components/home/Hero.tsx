@@ -67,7 +67,7 @@ export function Hero() {
               data-testid="hero-supporting-copy"
             >
               Software developer at {PROFILE.company}, shipping Flutter and React
-              Native products for fintech and enterprise banking — and the Node.js
+              Native products for fintech and enterprise banking - and the Node.js
               and FastAPI services underneath them.
             </motion.p>
 
@@ -75,7 +75,7 @@ export function Hero() {
               <Cta
                 testId="hero-cta-explore-work"
                 icon={ArrowDownRight}
-                onClick={() => runTransition(() => scrollToId("work", -80))}
+                onClick={() => runTransition(() => scrollToId("work", -80), "Work")}
               >
                 Selected work
               </Cta>

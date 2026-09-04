@@ -7,8 +7,6 @@ import { usePageTransition } from "@/components/ux/PageTransition";
 import { PROJECTS, type Project } from "@/data/projects";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-const year = (p: Project) => p.timeframe.match(/\d{4}/)?.[0] ?? "";
-
 function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }) {
   const navigate = useNavigate();
   const { runTransition } = usePageTransition();
@@ -22,12 +20,12 @@ function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }
       onFocus={onEnter}
       onClick={(e) => {
         e.preventDefault();
-        runTransition(() => navigate(`/work/${project.slug}`));
+        runTransition(() => navigate(`/work/${project.slug}`), project.product);
       }}
       className="group relative grid grid-cols-[2.5rem_1fr_auto] items-center gap-x-4 border-b border-hairline py-7 transition-colors duration-300 hover:bg-surface/70 focus-visible:bg-surface/70 lg:grid-cols-12 lg:gap-x-8 lg:py-9"
     >
       <span className="font-mono text-xs text-faint lg:col-span-1">{project.index}</span>
-      <h3 className="font-display text-2xl font-bold leading-none tracking-[-0.03em] transition-transform duration-500 ease-expo group-hover:translate-x-3 sm:text-3xl lg:col-span-5 lg:text-[2.9rem]">
+      <h3 className="font-display text-2xl font-bold leading-none tracking-[-0.03em] transition-transform duration-500 ease-expo group-hover:translate-x-3 sm:text-3xl lg:col-span-4 lg:text-[2.9rem]">
         {project.product}
       </h3>
       <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-sub lg:col-span-3 lg:block">
@@ -36,8 +34,10 @@ function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }
       <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-faint lg:col-span-2 lg:block">
         {project.platforms.slice(0, 2).join(" · ")}
       </span>
-      <span className="flex items-center justify-end gap-4 lg:col-span-1">
-        <span className="font-mono text-[11px] text-faint">{year(project)}</span>
+      <span className="flex items-center justify-end gap-4 lg:col-span-2">
+        <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-sub lg:inline">
+          {project.stack.slice(0, 2).join(" · ")}
+        </span>
         <ArrowUpRight
           className="h-4 w-4 text-faint transition-all duration-500 ease-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
           aria-hidden="true"
@@ -229,10 +229,10 @@ export function WorkGallery() {
 
         <div className="mt-6 hidden grid-cols-12 gap-x-8 border-b border-hairline pb-3 font-mono text-[10px] uppercase tracking-[0.25em] text-faint lg:grid">
           <span className="col-span-1">No.</span>
-          <span className="col-span-5">Product</span>
+          <span className="col-span-4">Product</span>
           <span className="col-span-3">Domain</span>
           <span className="col-span-2">Platform</span>
-          <span className="col-span-1 text-right">Year</span>
+          <span className="col-span-2 text-right">Stack</span>
         </div>
 
         <div

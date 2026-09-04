@@ -19,7 +19,6 @@ const LINKS = [
   { id: "work", label: "Work" },
   { id: "experience", label: "Experience" },
   { id: "capabilities", label: "Capabilities" },
-  { id: "about", label: "About" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -81,10 +80,11 @@ export function Nav() {
 
   const go = (id: string) => {
     setOpen(false);
+    const dest = LINKS.find((l) => l.id === id)?.label ?? id;
     runTransition(() => {
       if (location.pathname !== "/") navigate(`/#${id}`);
       else scrollToId(id, -80);
-    });
+    }, dest);
   };
 
   return (

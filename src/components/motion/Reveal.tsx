@@ -78,9 +78,11 @@ export function FadeUp({
 export function SectionLabel({
   index,
   title,
+  onDark = false,
 }: {
   index: string;
   title: string;
+  onDark?: boolean;
 }) {
   return (
     <div
@@ -90,10 +92,17 @@ export function SectionLabel({
       <span className="shrink-0 font-mono text-sm font-semibold tracking-[0.16em] text-signal sm:text-base">
         {index}
       </span>
-      <span className="shrink-0 font-mono text-xs font-semibold uppercase tracking-[0.28em] text-ink sm:text-[13px]">
+      <span
+        className={`shrink-0 font-mono text-xs font-semibold uppercase tracking-[0.28em] sm:text-[13px] ${
+          onDark ? "text-canvas" : "text-ink"
+        }`}
+      >
         {title}
       </span>
-      <span className="h-px flex-1 bg-ink/20" aria-hidden="true" />
+      <span
+        className={`h-px min-w-0 flex-1 ${onDark ? "bg-white/25" : "bg-ink/20"}`}
+        aria-hidden="true"
+      />
     </div>
   );
 }

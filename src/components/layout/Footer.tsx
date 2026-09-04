@@ -60,7 +60,13 @@ export function Footer() {
                     href={l.href}
                     data-testid={l.testid}
                     target={l.href.startsWith("http") ? "_blank" : undefined}
-                    rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    rel={
+                      l.href.startsWith("http")
+                        ? l.label === "LinkedIn" || l.label === "GitHub"
+                          ? "me noopener noreferrer"
+                          : "noopener noreferrer"
+                        : undefined
+                    }
                     className="group flex items-baseline justify-between gap-4 py-2.5 text-sm text-sub transition-colors hover:text-ink"
                   >
                     <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">{l.label}</span>

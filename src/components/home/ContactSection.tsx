@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { FadeUp, MaskedLines, SectionLabel } from "@/components/motion/Reveal";
 import { Cta } from "@/components/ux/Cta";
 import { PROFILE } from "@/data/site";
+import { CONTACT_ENDPOINT } from "@/lib/site";
 
 const TOPICS = [
   "Product engineering role",
@@ -59,39 +60,41 @@ export function ContactSection() {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return setStatus("idle");
-    const endpoint = process.env.REACT_APP_CONTACT_ENDPOINT;
+    const endpoint = CONTACT_ENDPOINT;
     setStatus("sending");
 
-    if (endpoint) {
-      try {
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, topic, message }),
-        });
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-        setStatus("sent");
-        toast.success("Message sent — thank you. I'll reply soon.");
-        setName("");
-        setEmail("");
-        setMessage("");
-      } catch {
-        setStatus("error");
-        toast.error("The message could not be sent. Please email me directly instead.");
-      }
-    } else {
-      const subject = encodeURIComponent(`[Portfolio] ${topic} — from ${name.trim()}`);
-      const body = encodeURIComponent(`Name: ${name.trim()}\nEmail: ${email.trim()}\nTopic: ${topic}\n\n${message.trim()}`);
-      window.location.href = `mailto:${PROFILE.email}?subject=${subject}&body=${body}`;
-      setStatus("mailto");
-      toast("Opening your email client with a prefilled message…");
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          topic,
+          message: message.trim(),
+          _subject: `[Portfolio] ${topic} — ${name.trim()}`,
+          _replyto: email.trim(),
+        }),
+      });
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      setStatus("sent");
+      toast.success("Message sent — thank you. I'll reply soon.");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch {
+      setStatus("error");
+      toast.error("The message could not be sent. Please email me directly instead.");
     }
   };
 
   return (
     <section id="contact" className="scroll-mt-24 border-t border-hairline py-24 sm:py-32" aria-label="Contact">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <SectionLabel index="05" title="Contact" />
+        <SectionLabel index="04" title="Contact" />
         <h2 className="mt-10 font-display text-4xl font-bold leading-[1.15] tracking-[-0.035em] sm:text-5xl lg:text-6xl">
           <MaskedLines
             lines={[
@@ -225,7 +228,13 @@ export function ContactSection() {
                     href={l.href}
                     data-testid={l.testid}
                     target={l.href.startsWith("http") ? "_blank" : undefined}
-                    rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    rel={
+                      l.href.startsWith("http")
+                        ? l.label === "LinkedIn" || l.label === "GitHub"
+                          ? "me noopener noreferrer"
+                          : "noopener noreferrer"
+                        : undefined
+                    }
                     className="group flex items-center justify-between gap-4 py-4 transition-colors hover:text-ink"
                   >
                     <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">{l.label}</span>

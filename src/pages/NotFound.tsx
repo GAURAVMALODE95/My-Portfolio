@@ -4,7 +4,10 @@ import { Cta } from "@/components/ux/Cta";
 import { useSeo } from "@/hooks/useSeo";
 
 export default function NotFound() {
-  useSeo("404 — Gaurav Malode", "This page does not exist.");
+  useSeo("404 — Gaurav Malode", "This page does not exist.", {
+    path: "/404",
+    noindex: true,
+  });
   return (
     <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-24 sm:px-8" data-testid="not-found-page">
       <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-faint">

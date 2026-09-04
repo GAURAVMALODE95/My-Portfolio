@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { DesktopFrame, IPhoneFrame } from "@/components/DeviceMockups";
 import { CountUp, EASE, FadeUp, MaskedLines } from "@/components/motion/Reveal";
+import { caseStudyJsonLd } from "@/components/seo/JsonLd";
 import { usePageTransition } from "@/components/ux/PageTransition";
 import { Tag } from "@/components/ux/Tag";
 import { getProject, nextProject, type Project } from "@/data/projects";
@@ -134,6 +135,17 @@ export default function CaseStudy() {
   useSeo(
     project ? `${project.title} — Gaurav Malode` : "Not found — Gaurav Malode",
     project?.impact ?? "This page does not exist.",
+    project
+      ? {
+          path: `/work/${project.slug}`,
+          type: "article",
+          jsonLd: caseStudyJsonLd({
+            title: project.title,
+            description: project.impact,
+            slug: project.slug,
+          }),
+        }
+      : { path: "/404", noindex: true },
   );
 
   if (!project) return <NotFound />;
@@ -150,7 +162,7 @@ export default function CaseStudy() {
           data-testid="case-back-link"
           onClick={(e) => {
             e.preventDefault();
-            runTransition(() => navigate("/"));
+            runTransition(() => navigate("/"), "Work");
           }}
           className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-faint transition-colors hover:text-ink"
         >
@@ -330,7 +342,7 @@ export default function CaseStudy() {
           data-testid="case-next-project"
           onClick={(e) => {
             e.preventDefault();
-            runTransition(() => navigate(`/work/${next.slug}`));
+            runTransition(() => navigate(`/work/${next.slug}`), next.product);
           }}
           className="group mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-14 transition-colors hover:bg-surface/50 sm:px-8 sm:py-20"
         >

@@ -6,7 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
 import { EASE } from "@/components/motion/Reveal";
 import { Cursor } from "@/components/ux/Cursor";
-import { TransitionProvider } from "@/components/ux/PageTransition";
+import { TransitionProvider, usePageTransition } from "@/components/ux/PageTransition";
 import { initLenis, scrollToTop } from "@/lib/lenis";
 import CaseStudy from "@/pages/CaseStudy";
 import Home from "@/pages/Home";
@@ -52,6 +52,29 @@ function LenisRoot() {
   return null;
 }
 
+function PageAtmosphere() {
+  const { transitioning } = usePageTransition();
+  if (transitioning) return null;
+  return (
+    <>
+      <div
+        className="pointer-events-none fixed inset-0 z-[1] hidden opacity-40 lg:block"
+        aria-hidden="true"
+      >
+        <div className="mx-auto grid h-full max-w-7xl grid-cols-12 px-8">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={i} className="border-l border-hairline last:border-r" />
+          ))}
+        </div>
+      </div>
+      <div
+        className="grain-overlay pointer-events-none fixed inset-0 z-[5] opacity-[0.05] mix-blend-overlay"
+        aria-hidden="true"
+      />
+    </>
+  );
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -68,21 +91,8 @@ export default function App() {
         <Nav />
         <AnimatedRoutes />
         <Footer />
+        <PageAtmosphere />
       </TransitionProvider>
-      <div
-        className="pointer-events-none fixed inset-0 z-[1] hidden opacity-40 lg:block"
-        aria-hidden="true"
-      >
-        <div className="mx-auto grid h-full max-w-7xl grid-cols-12 px-8">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="border-l border-hairline last:border-r" />
-          ))}
-        </div>
-      </div>
-      <div
-        className="grain-overlay pointer-events-none fixed inset-0 z-[5] opacity-[0.05] mix-blend-overlay"
-        aria-hidden="true"
-      />
       <Cursor />
       <Toaster
         position="bottom-right"
