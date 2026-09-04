@@ -1,222 +1,143 @@
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "framer-motion";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { useRef, type MouseEvent } from "react";
-import {
-  DesktopFrame,
-  IPhoneFrame,
-  SignalChart,
-} from "@/components/DeviceMockups";
-import { MaskedLines } from "@/components/motion/Reveal";
-import { PROJECTS } from "@/data/projects";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { useRef } from "react";
+import { EASE, MaskedLines } from "@/components/motion/Reveal";
+import { Cta } from "@/components/ux/Cta";
+import { FitText } from "@/components/ux/FitText";
+import { usePageTransition } from "@/components/ux/PageTransition";
 import { PROFILE } from "@/data/site";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { scrollToId } from "@/lib/lenis";
+
+function Meta({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="font-mono text-[11px] uppercase tracking-[0.22em] text-faint">{label}</dt>
+      <dd className="mt-2 text-sm font-medium leading-snug text-ink">{value}</dd>
+    </div>
+  );
+}
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -90]);
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.75],
-    [1, reduce ? 1 : 0],
-  );
+  const wide = useMediaQuery("(min-width: 1024px)");
+  const { runTransition } = usePageTransition();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const yName = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -30]);
+  const fade = useTransform(scrollYProgress, [0, 0.85], [1, reduce ? 1 : 0]);
 
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [4.5, -4.5]), {
-    stiffness: 70,
-    damping: 18,
+  const enter = (delay: number) => ({
+    initial: reduce ? { opacity: 0 } : { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { delay, duration: 0.7, ease: EASE },
   });
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-4.5, 4.5]), {
-    stiffness: 70,
-    damping: 18,
-  });
-
-  const onMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (reduce) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    mx.set((e.clientX - r.left) / r.width - 0.5);
-    my.set((e.clientY - r.top) / r.height - 0.5);
-  };
-  const onMouseLeave = () => {
-    mx.set(0);
-    my.set(0);
-  };
-
-  const musaffa = PROJECTS[0];
-  const terminal = PROJECTS[2];
 
   return (
     <section
       ref={ref}
-      className="relative flex min-h-[100svh] items-center overflow-hidden pt-24 pb-16"
+      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden pt-24 sm:pt-28"
       aria-label="Introduction"
     >
-      <motion.div
-        style={{ y, opacity }}
-        className="mx-auto grid w-full max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-12"
-      >
-        <div className="lg:col-span-7">
-          <motion.p
-            className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.3em] text-faint"
-            initial={reduce ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.15, duration: 0.6 }}
-            data-testid="hero-eyebrow"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true" />
-            {PROFILE.name} — Software Engineer / Fintech / Mobile
-          </motion.p>
-
-          <h1 className="mt-7 font-display text-[13.5vw] font-extrabold leading-[0.98] tracking-tighter sm:text-6xl lg:text-7xl xl:text-[5.2rem]">
-            <MaskedLines
-              delay={0.25}
-              lines={[
-                <>I build <span className="text-signal">secure</span></>,
-                <>financial products,</>,
-                <>from mobile flows</>,
-                <>to market intelligence.</>,
-              ]}
-            />
-          </h1>
-
-          <motion.p
-            className="mt-7 max-w-xl text-base leading-relaxed text-sub sm:text-lg"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75, duration: 0.7 }}
-            data-testid="hero-supporting-copy"
-          >
-            Software Developer focused on Flutter, React Native, React,
-            Node.js, FastAPI, and security-sensitive product engineering.
-          </motion.p>
-
-          <motion.div
-            className="mt-9 flex flex-wrap items-center gap-4"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.7 }}
-          >
-            <button
-              type="button"
-              data-testid="hero-cta-explore-work"
-              onClick={() => scrollToId("work", -80)}
-              className="group inline-flex items-center gap-2 rounded-full bg-signal px-6 py-3.5 font-mono text-xs uppercase tracking-[0.15em] text-canvas transition-colors hover:bg-signal-hover"
-            >
-              <span className="cta-shift">
-                <span>Explore selected work</span>
-              </span>
-              <ArrowDown
-                className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5"
-                aria-hidden="true"
-              />
-            </button>
-            <a
-              href={PROFILE.resumePath}
-              download
-              data-testid="hero-cta-resume"
-              className="group inline-flex items-center gap-2 rounded-full border border-hairline px-6 py-3.5 font-mono text-xs uppercase tracking-[0.15em] text-sub transition-colors hover:border-signal hover:text-ink"
-            >
-              <span className="cta-shift">
-                <span>Download résumé</span>
-              </span>
-              <ArrowUpRight
-                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                aria-hidden="true"
-              />
-            </a>
-          </motion.div>
-
-          <motion.div
-            className="mt-12 flex flex-col gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-faint sm:flex-row sm:gap-8"
-            initial={reduce ? { opacity: 0 } : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.05, duration: 0.7 }}
-            data-testid="hero-metadata"
-          >
-            <span>{PROFILE.location}</span>
-            <span className="hidden text-hairline sm:inline" aria-hidden="true">
-              /
+      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
+        <motion.div
+          {...enter(0.1)}
+          className="flex items-center justify-between border-b border-hairline pb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-faint"
+          data-testid="hero-eyebrow"
+        >
+          <span>Portfolio — 2026</span>
+          <span className="hidden text-sub sm:inline">{PROFILE.location}</span>
+          <span className="flex items-center gap-2 text-ink">
+            <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal" />
             </span>
-            <span>{PROFILE.availability}</span>
-          </motion.div>
-        </div>
+            Open to work
+          </span>
+        </motion.div>
 
-        <div className="lg:col-span-5" style={{ perspective: 1100 }}>
-          <motion.div
-            data-testid="hero-visual"
-            className="relative mx-auto max-w-md lg:max-w-none"
-            style={
-              reduce
-                ? undefined
-                : { rotateX, rotateY, transformStyle: "preserve-3d" }
+        <motion.div style={{ opacity: fade }} className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-8">
+            <h1 className="font-display text-[clamp(1.9rem,4.6vw,4.1rem)] font-semibold leading-[1.06] tracking-[-0.02em] text-ink">
+              <MaskedLines
+                delay={0.2}
+                lines={[
+                  <>Secure financial software —</>,
+                  <>
+                    from the{" "}
+                    <span className="italic font-medium text-signal">mobile screen</span>
+                  </>,
+                  <>to the market-data layer.</>,
+                ]}
+              />
+            </h1>
+          </div>
+
+          <div className="flex flex-col gap-8 lg:col-span-4 lg:border-l lg:border-hairline lg:pl-8">
+            <motion.p
+              {...enter(0.6)}
+              className="max-w-sm text-base leading-relaxed text-sub"
+              data-testid="hero-supporting-copy"
+            >
+              Software developer at {PROFILE.company}, shipping Flutter and React
+              Native products for fintech and enterprise banking — and the Node.js
+              and FastAPI services underneath them.
+            </motion.p>
+
+            <motion.div {...enter(0.75)} className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <Cta
+                testId="hero-cta-explore-work"
+                icon={ArrowDownRight}
+                onClick={() => runTransition(() => scrollToId("work", -80))}
+              >
+                Selected work
+              </Cta>
+              <Cta testId="hero-cta-resume" icon={ArrowUpRight} variant="ghost" href={PROFILE.resumePath} download>
+                Résumé (PDF)
+              </Cta>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        <motion.dl
+          {...enter(0.85)}
+          className="mt-14 grid grid-cols-2 gap-8 border-t border-hairline pt-6 sm:grid-cols-4 lg:mt-20"
+          data-testid="hero-metadata"
+        >
+          <Meta label="Role" value={PROFILE.role} />
+          <Meta label="Company" value={PROFILE.company} />
+          <Meta label="Focus" value={PROFILE.focus.slice(0, 3).join(" · ")} />
+          <Meta label="Based in" value={PROFILE.location} />
+        </motion.dl>
+      </div>
+
+      <motion.div style={{ y: yName }} className="mx-auto mt-16 w-full max-w-7xl px-5 pb-5 sm:px-8 lg:mt-12">
+        <div className="flex items-end justify-between border-t border-hairline pt-3 font-mono text-[11px] uppercase tracking-[0.22em] text-faint">
+          <span className="text-sub">Software Developer</span>
+          <span className="flex items-center gap-2">
+            Scroll
+            <motion.span
+              aria-hidden="true"
+              className="block h-6 w-px bg-faint"
+              animate={reduce ? undefined : { scaleY: [0, 1, 1, 0], originY: [0, 0, 1, 1] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </span>
+        </div>
+        <p
+          className="mt-3 select-none font-display font-extrabold uppercase leading-[0.86] tracking-[-0.03em] text-ink"
+          data-testid="hero-name"
+          aria-label={PROFILE.name}
+        >
+          <MaskedLines
+            delay={0.4}
+            lines={
+              wide
+                ? [<FitText text={PROFILE.name} />]
+                : [<FitText text="Gaurav" />, <FitText text="Malode" />]
             }
-            onMouseMove={onMouseMove}
-            onMouseLeave={onMouseLeave}
-            initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.55, duration: 0.9 }}
-          >
-            <motion.div
-              animate={reduce ? undefined : { y: [0, -8, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <DesktopFrame
-                src={terminal.images.primary}
-                alt={terminal.imageAlts.primary}
-                title={terminal.frameTitle}
-                priority
-                className="w-full"
-              />
-            </motion.div>
-
-            <motion.div
-              className="absolute -bottom-10 -left-4 w-[38%] sm:-left-10"
-              style={reduce ? undefined : { transform: "translateZ(60px)" }}
-              animate={reduce ? undefined : { y: [0, -12, 0] }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.8,
-              }}
-            >
-              <IPhoneFrame
-                src={musaffa.images.primary}
-                alt={musaffa.imageAlts.primary}
-                priority
-              />
-            </motion.div>
-
-            <motion.div
-              className="absolute -right-3 -top-8 hidden w-44 border border-hairline bg-surface/90 p-3 backdrop-blur-sm sm:block"
-              style={reduce ? undefined : { transform: "translateZ(90px)" }}
-              animate={reduce ? undefined : { y: [0, -6, 0] }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1.6,
-              }}
-            >
-              <p className="mb-1 font-mono text-[9px] uppercase tracking-[0.2em] text-faint">
-                Signal / Live
-              </p>
-              <SignalChart className="h-12 w-full text-ink" />
-            </motion.div>
-          </motion.div>
-        </div>
+          />
+        </p>
       </motion.div>
     </section>
   );

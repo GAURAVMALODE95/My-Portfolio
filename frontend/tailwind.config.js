@@ -13,9 +13,13 @@ module.exports = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
       },
+      transitionTimingFunction: {
+        expo: 'cubic-bezier(0.22, 1, 0.36, 1)'
+      },
       fontFamily: {
-        display: ['"Cabinet Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        body: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['"Poppins"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['"Inter"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        body: ['"Inter"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
       },
       colors: {

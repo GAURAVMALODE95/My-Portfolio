@@ -8,9 +8,9 @@
     --surface: 239 236 230;
     --surface-2: 228 224 215;
     --ink: 20 21 24;
-    --sub: 92 94 102;
-    --faint: 140 142 153;
-    --hairline: rgba(20, 21, 24, 0.1);
+    --sub: 71 73 82;
+    --faint: 107 109 120;
+    --hairline: rgba(20, 21, 24, 0.12);
     --signal: 224 92 0;
     --signal-hover: 190 76 0;
 
@@ -25,7 +25,7 @@
     --secondary: 40 12% 92%;
     --secondary-foreground: 225 9% 9%;
     --muted: 40 12% 92%;
-    --muted-foreground: 225 5% 40%;
+    --muted-foreground: 225 8% 34%;
     --accent: 40 12% 92%;
     --accent-foreground: 225 9% 9%;
     --destructive: 0 84.2% 60.2%;
@@ -107,21 +107,58 @@
     }
 }
 
-/* ---- Marquee ---- */
-@keyframes marquee {
-    from {
-        transform: translateX(0);
+/* ---- Custom cursor (fine pointers only) ---- */
+@media (pointer: fine) {
+    html.has-cursor,
+    html.has-cursor * {
+        cursor: none !important;
     }
-    to {
-        transform: translateX(-50%);
+    html.has-cursor input,
+    html.has-cursor textarea,
+    html.has-cursor select {
+        cursor: auto !important;
     }
 }
-.marquee-track {
-    animation: marquee 32s linear infinite;
-    will-change: transform;
+
+/* ---- Sweep-fill button ---- */
+.btn-sweep {
+    isolation: isolate;
 }
-.marquee-track:hover {
-    animation-play-state: paused;
+.btn-sweep::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--sweep);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: -1;
+}
+.btn-sweep:hover::before,
+.btn-sweep:focus-visible::before {
+    transform: scaleY(1);
+}
+
+/* ---- Editorial underline input ---- */
+.field {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--hairline);
+    padding: 0.9rem 0;
+    font-size: 1rem;
+    color: rgb(var(--ink));
+    transition: border-color 0.3s;
+}
+.field::placeholder {
+    color: rgb(var(--faint));
+}
+.field:focus {
+    outline: none;
+    border-bottom-color: rgb(var(--signal));
+}
+.field[aria-invalid="true"] {
+    border-bottom-color: #e5484d;
 }
 
 /* ---- Grain overlay ---- */
@@ -168,9 +205,6 @@
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
-    }
-    .marquee-track {
-        animation: none;
     }
     *,
     *::before,

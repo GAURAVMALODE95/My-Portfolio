@@ -6,9 +6,12 @@ import {
   useScroll,
   useSpring,
 } from "framer-motion";
-import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
+import { ArrowUpRight, Moon, Sun } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { EASE } from "@/components/motion/Reveal";
+import { ScrambleText } from "@/components/ux/ScrambleText";
+import { usePageTransition } from "@/components/ux/PageTransition";
 import { PROFILE } from "@/data/site";
 import { scrollToId } from "@/lib/lenis";
 import { useTheme } from "@/theme/ThemeProvider";
@@ -26,7 +29,7 @@ function ScrollProgress() {
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 24 });
   return (
     <motion.div
-      className="fixed left-0 right-0 top-0 z-[70] hidden h-[2px] origin-left bg-signal lg:block"
+      className="fixed left-0 right-0 top-0 z-[70] hidden h-px origin-left bg-signal lg:block"
       style={{ scaleX }}
       aria-hidden="true"
     />
@@ -37,10 +40,12 @@ export function Nav() {
   const { theme, toggle } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
+  const { runTransition } = usePageTransition();
   const reduce = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [hovered, setHovered] = useState("");
   const firstMobileLink = useRef<HTMLButtonElement>(null);
   const { scrollY } = useScroll();
 
@@ -52,11 +57,7 @@ export function Nav() {
       return;
     }
     const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActiveSection(e.target.id);
-        });
-      },
+      (entries) => entries.forEach((e) => e.isIntersecting && setActiveSection(e.target.id)),
       { rootMargin: "-40% 0px -55% 0px" },
     );
     LINKS.forEach((l) => {
@@ -66,27 +67,26 @@ export function Nav() {
     return () => obs.disconnect();
   }, [location.pathname]);
 
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname, location.hash]);
+  useEffect(() => setOpen(false), [location.pathname, location.hash]);
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
     firstMobileLink.current?.focus();
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   const go = (id: string) => {
     setOpen(false);
-    if (location.pathname !== "/") {
-      navigate(`/#${id}`);
-    } else {
-      scrollToId(id, -80);
-    }
+    runTransition(() => {
+      if (location.pathname !== "/") navigate(`/#${id}`);
+      else scrollToId(id, -80);
+    });
   };
 
   return (
@@ -99,40 +99,35 @@ export function Nav() {
             : "border-b border-transparent"
         }`}
       >
-        <nav
-          className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8"
-          aria-label="Primary"
-        >
-          <Link
-            to="/"
-            data-testid="nav-logo"
-            className="group flex items-baseline gap-2"
-            aria-label="Gaurav Malode — home"
-          >
-            <span className="font-display text-xl font-extrabold tracking-tight">
-              GM
-            </span>
-            <span className="hidden font-mono text-[10px] uppercase tracking-[0.3em] text-faint transition-colors group-hover:text-sub sm:inline">
-              Gaurav Malode
+        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8" aria-label="Primary">
+          <Link to="/" data-testid="nav-logo" className="group flex items-baseline gap-3" aria-label="Gaurav Malode — home">
+            <span className="font-display text-[15px] font-bold tracking-[-0.02em]">Gaurav Malode</span>
+            <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-faint transition-colors group-hover:text-sub xl:inline">
+              — {PROFILE.role}
             </span>
           </Link>
 
-          <div className="hidden items-center gap-7 lg:flex">
+          <div className="hidden items-center gap-8 lg:flex">
             {LINKS.map((l) => (
               <button
                 key={l.id}
                 type="button"
                 data-testid={`nav-link-${l.id}`}
                 onClick={() => go(l.id)}
-                className="link-draw flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-sub transition-colors hover:text-ink"
+                onMouseEnter={() => setHovered(l.id)}
+                onMouseLeave={() => setHovered("")}
+                className={`relative font-mono text-[11px] uppercase tracking-[0.2em] transition-colors hover:text-ink ${
+                  activeSection === l.id ? "text-ink" : "text-sub"
+                }`}
               >
+                <ScrambleText text={l.label} active={hovered === l.id} />
                 <span
-                  className={`h-1 w-1 rounded-full bg-signal transition-opacity ${
-                    activeSection === l.id ? "opacity-100" : "opacity-0"
+                  className={`absolute -bottom-1.5 left-0 h-px w-full bg-signal transition-transform duration-300 ${
+                    activeSection === l.id ? "scale-x-100" : "scale-x-0"
                   }`}
+                  style={{ transformOrigin: "left" }}
                   aria-hidden="true"
                 />
-                {l.label}
               </button>
             ))}
           </div>
@@ -143,20 +138,16 @@ export function Nav() {
               data-testid="nav-theme-toggle"
               onClick={toggle}
               aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-hairline text-sub transition-colors hover:border-signal/50 hover:text-ink"
+              className="flex h-9 w-9 items-center justify-center border border-hairline text-sub transition-colors hover:border-ink hover:text-ink"
             >
               <motion.span
                 key={theme}
-                initial={reduce ? false : { rotate: -120, opacity: 0 }}
+                initial={reduce ? false : { rotate: -90, opacity: 0 }}
                 animate={{ rotate: 0, opacity: 1 }}
-                transition={{ duration: 0.45 }}
+                transition={{ duration: 0.4 }}
                 className="flex"
               >
-                {theme === "dark" ? (
-                  <Sun className="h-4 w-4" aria-hidden="true" />
-                ) : (
-                  <Moon className="h-4 w-4" aria-hidden="true" />
-                )}
+                {theme === "dark" ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
               </motion.span>
             </button>
 
@@ -164,15 +155,10 @@ export function Nav() {
               href={PROFILE.resumePath}
               download
               data-testid="nav-resume-download"
-              className="group hidden items-center gap-1.5 rounded-full border border-hairline px-4 py-2 font-mono text-[11px] uppercase tracking-[0.15em] text-sub transition-colors hover:border-signal hover:text-ink sm:flex"
+              className="group hidden h-9 items-center gap-2 border border-hairline px-4 font-mono text-[11px] uppercase tracking-[0.18em] text-sub transition-colors hover:border-ink hover:text-ink sm:flex"
             >
-              <span className="cta-shift">
-                <span>Download résumé</span>
-              </span>
-              <ArrowUpRight
-                className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                aria-hidden="true"
-              />
+              Résumé
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
             </a>
 
             <button
@@ -182,13 +168,9 @@ export function Nav() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Close menu" : "Open menu"}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-hairline text-sub transition-colors hover:text-ink lg:hidden"
+              className="flex h-9 items-center gap-2 border border-hairline px-3 font-mono text-[11px] uppercase tracking-[0.18em] text-sub transition-colors hover:text-ink lg:hidden"
             >
-              {open ? (
-                <X className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <Menu className="h-4 w-4" aria-hidden="true" />
-              )}
+              {open ? "Close" : "Menu"}
             </button>
           </div>
         </nav>
@@ -199,37 +181,48 @@ export function Nav() {
           <motion.div
             id="mobile-menu"
             data-testid="nav-mobile-drawer"
-            className="fixed inset-x-0 top-16 z-40 border-b border-hairline bg-canvas/95 backdrop-blur-md lg:hidden"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, y: -12 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-40 flex flex-col bg-canvas pt-16 lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
           >
-            <div className="flex flex-col px-6 py-6">
-              {LINKS.map((l, i) => (
-                <button
-                  key={l.id}
-                  ref={i === 0 ? firstMobileLink : undefined}
-                  type="button"
-                  data-testid={`nav-mobile-link-${l.id}`}
-                  onClick={() => go(l.id)}
-                  className="flex items-center justify-between border-b border-hairline py-4 text-left font-display text-2xl font-bold tracking-tight last:border-0"
+            <div className="flex flex-1 flex-col justify-between px-5 py-8 sm:px-8">
+              <ul>
+                {LINKS.map((l, i) => (
+                  <motion.li
+                    key={l.id}
+                    initial={reduce ? false : { opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 + i * 0.05, duration: 0.5, ease: EASE }}
+                  >
+                    <button
+                      ref={i === 0 ? firstMobileLink : undefined}
+                      type="button"
+                      data-testid={`nav-mobile-link-${l.id}`}
+                      onClick={() => go(l.id)}
+                      className="flex w-full items-baseline justify-between border-b border-hairline py-5 text-left font-display text-4xl font-bold tracking-[-0.03em]"
+                    >
+                      {l.label}
+                      <span className="font-mono text-[10px] text-faint">0{i + 1}</span>
+                    </button>
+                  </motion.li>
+                ))}
+              </ul>
+              <div className="flex flex-col gap-6">
+                <a
+                  href={PROFILE.resumePath}
+                  download
+                  data-testid="nav-mobile-resume-download"
+                  className="flex items-center justify-between border border-ink bg-ink px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-canvas"
                 >
-                  {l.label}
-                  <span className="font-mono text-[10px] text-faint">
-                    0{i + 1}
-                  </span>
-                </button>
-              ))}
-              <a
-                href={PROFILE.resumePath}
-                download
-                data-testid="nav-mobile-resume-download"
-                className="mt-5 flex items-center justify-center gap-2 rounded-full bg-signal px-5 py-3 font-mono text-xs uppercase tracking-[0.15em] text-canvas"
-              >
-                Download résumé (PDF)
-                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-              </a>
+                  Download résumé (PDF)
+                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint">
+                  {PROFILE.email}
+                </p>
+              </div>
             </div>
           </motion.div>
         )}

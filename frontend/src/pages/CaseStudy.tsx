@@ -1,14 +1,13 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import {
-  DesktopFrame,
-  IPhoneFrame,
-  SignalChart,
-} from "@/components/DeviceMockups";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { DesktopFrame, IPhoneFrame } from "@/components/DeviceMockups";
 import { CountUp, EASE, FadeUp, MaskedLines } from "@/components/motion/Reveal";
+import { usePageTransition } from "@/components/ux/PageTransition";
+import { Tag } from "@/components/ux/Tag";
 import { getProject, nextProject, type Project } from "@/data/projects";
+import { useSeo } from "@/hooks/useSeo";
 import { scrollToId } from "@/lib/lenis";
 import NotFound from "@/pages/NotFound";
 
@@ -62,12 +61,6 @@ function CaseVisual({ project }: { project: Project }) {
               title={project.frameTitle}
               priority
             />
-            <div className="absolute -bottom-6 -left-4 w-48 border border-hairline bg-surface p-3 sm:-left-8">
-              <p className="mb-1 font-mono text-[9px] uppercase tracking-[0.2em] text-faint">
-                Signal / Live
-              </p>
-              <SignalChart className="h-10 w-full text-ink" />
-            </div>
           </div>
         )}
       </motion.div>
@@ -124,9 +117,9 @@ function MiniNav() {
 
 function SectionHeading({ id, index, title }: { id: string; index: string; title: string }) {
   return (
-    <div className="flex items-baseline gap-4">
-      <span className="font-mono text-xs tracking-[0.2em] text-signal">{index}</span>
-      <h2 id={`${id}-heading`} className="font-display text-3xl font-extrabold tracking-tighter sm:text-4xl">
+    <div className="flex items-baseline gap-5">
+      <span className="font-mono text-[11px] tracking-[0.2em] text-signal">{index}</span>
+      <h2 id={`${id}-heading`} className="font-display text-3xl font-bold tracking-[-0.03em] sm:text-4xl">
         {title}
       </h2>
     </div>
@@ -135,7 +128,13 @@ function SectionHeading({ id, index, title }: { id: string; index: string; title
 
 export default function CaseStudy() {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const { runTransition } = usePageTransition();
   const project = slug ? getProject(slug) : undefined;
+  useSeo(
+    project ? `${project.title} — Gaurav Malode` : "Not found — Gaurav Malode",
+    project?.impact ?? "This page does not exist.",
+  );
 
   if (!project) return <NotFound />;
 
@@ -149,16 +148,20 @@ export default function CaseStudy() {
         <Link
           to="/"
           data-testid="case-back-link"
+          onClick={(e) => {
+            e.preventDefault();
+            runTransition(() => navigate("/"));
+          }}
           className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-faint transition-colors hover:text-ink"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-1" aria-hidden="true" />
           All work
         </Link>
 
-        <p className="mt-10 font-mono text-xs uppercase tracking-[0.3em] text-faint">
-          <span className="text-signal">{project.index} //</span> {project.domain}
+        <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.3em] text-faint">
+          <span className="text-signal">{project.index}</span> — {project.domain}
         </p>
-        <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.02] tracking-tighter sm:text-6xl lg:text-7xl">
+        <h1 className="mt-5 font-display text-5xl font-bold leading-[0.96] tracking-[-0.04em] sm:text-7xl lg:text-[6.5rem]">
           <MaskedLines lines={[project.product]} />
         </h1>
         <FadeUp delay={0.25}>
@@ -204,7 +207,7 @@ export default function CaseStudy() {
       </header>
 
       <section id="overview" aria-labelledby="overview-heading" className="mx-auto max-w-7xl scroll-mt-32 px-5 py-20 sm:px-8 sm:py-28">
-        <SectionHeading id="overview" index="01 //" title="Context" />
+        <SectionHeading id="overview" index="01" title="Context" />
         <div className="mt-8 grid gap-8 lg:grid-cols-12">
           <FadeUp className="lg:col-span-8">
             {project.overview.map((p, i) => (
@@ -228,7 +231,7 @@ export default function CaseStudy() {
 
       <section id="scope" aria-labelledby="scope-heading" className="border-t border-hairline bg-surface/30">
         <div className="mx-auto max-w-7xl scroll-mt-32 px-5 py-20 sm:px-8 sm:py-28">
-          <SectionHeading id="scope" index="02 //" title="The engineering focus" />
+          <SectionHeading id="scope" index="02" title="The engineering focus" />
           <div className="mt-12 grid gap-px border border-hairline bg-hairline md:grid-cols-2">
             {project.scope.map((s, i) => (
               <FadeUp key={s.title} delay={i * 0.08} className="bg-canvas">
@@ -248,7 +251,7 @@ export default function CaseStudy() {
       </section>
 
       <section id="build" aria-labelledby="build-heading" className="mx-auto max-w-7xl scroll-mt-32 px-5 py-20 sm:px-8 sm:py-28">
-        <SectionHeading id="build" index="03 //" title="What was built" />
+        <SectionHeading id="build" index="03" title="What was built" />
         <div className="mt-12 space-y-0">
           {project.build.map((b, i) => (
             <FadeUp key={b.title} delay={i * 0.06}>
@@ -270,12 +273,12 @@ export default function CaseStudy() {
 
       <section id="outcomes" aria-labelledby="outcomes-heading" className="border-t border-hairline bg-surface/30">
         <div className="mx-auto max-w-7xl scroll-mt-32 px-5 py-20 sm:px-8 sm:py-28">
-          <SectionHeading id="outcomes" index="04 //" title="Results & impact" />
+          <SectionHeading id="outcomes" index="04" title="Results & impact" />
           <div className="mt-12 grid grid-cols-2 gap-px border border-hairline bg-hairline md:grid-cols-3 lg:grid-cols-5">
             {project.outcomes.map((o, i) => (
               <FadeUp key={o.label} delay={i * 0.07} className="bg-canvas">
                 <div className="h-full p-6 sm:p-8" data-testid={`case-outcome-${i}`}>
-                  <p className="font-display text-3xl font-extrabold tracking-tight text-signal sm:text-4xl">
+                  <p className="font-display text-4xl font-bold tracking-[-0.03em] sm:text-5xl">
                     {o.countTo !== undefined ? (
                       <CountUp to={o.countTo} suffix={o.suffix ?? ""} />
                     ) : (
@@ -300,16 +303,11 @@ export default function CaseStudy() {
       </section>
 
       <section id="stack" aria-labelledby="stack-heading" className="mx-auto max-w-7xl scroll-mt-32 px-5 py-20 sm:px-8 sm:py-28">
-        <SectionHeading id="stack" index="05 //" title="Stack & methods" />
+        <SectionHeading id="stack" index="05" title="Stack & methods" />
         <FadeUp>
           <div className="mt-10 flex flex-wrap gap-2.5" data-testid="case-stack-tags">
             {project.stack.map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-hairline px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-sub transition-colors hover:border-signal/50 hover:text-ink"
-              >
-                {t}
-              </span>
+              <Tag key={t}>{t}</Tag>
             ))}
           </div>
         </FadeUp>
@@ -330,17 +328,21 @@ export default function CaseStudy() {
         <Link
           to={`/work/${next.slug}`}
           data-testid="case-next-project"
+          onClick={(e) => {
+            e.preventDefault();
+            runTransition(() => navigate(`/work/${next.slug}`));
+          }}
           className="group mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-14 transition-colors hover:bg-surface/50 sm:px-8 sm:py-20"
         >
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-faint">
               Next project — {next.index}
             </p>
-            <p className="mt-3 font-display text-3xl font-extrabold tracking-tighter transition-transform duration-300 group-hover:translate-x-1 sm:text-5xl">
+            <p className="mt-3 font-display text-3xl font-bold tracking-[-0.035em] transition-transform duration-500 ease-expo group-hover:translate-x-2 sm:text-6xl">
               {next.product}
             </p>
           </div>
-          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-hairline text-sub transition-all duration-300 group-hover:border-signal group-hover:text-signal sm:h-16 sm:w-16">
+          <span className="flex h-14 w-14 shrink-0 items-center justify-center border border-hairline text-sub transition-all duration-300 group-hover:border-signal group-hover:bg-signal group-hover:text-white sm:h-16 sm:w-16">
             <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
           </span>
         </Link>

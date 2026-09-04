@@ -1,9 +1,11 @@
 export const PROFILE = {
   name: "Gaurav Malode",
   role: "Software Developer",
+  company: "Autotropic Cloud Technologies",
+  focus: ["Flutter", "React Native", "React", "Node.js", "FastAPI"],
   tagline: "SOFTWARE ENGINEER / FINTECH / MOBILE",
-  location: "NASHIK, INDIA",
-  availability: "AVAILABLE FOR THOUGHTFUL PRODUCT & ENGINEERING CONVERSATIONS",
+  location: "Nashik, India",
+  availability: "Open to product & engineering conversations",
   email: "gauravmalode777@gmail.com",
   phone: "+918208373146",
   phoneDisplay: "+91 82083 73146",
@@ -12,6 +14,13 @@ export const PROFILE = {
   website: "https://gauravmalode.in",
   resumePath: "/resume/Gaurav-Malode-Resume.pdf",
 };
+
+export const STATS = [
+  { value: 1.4, suffix: "M+", label: "App downloads", source: "Musaffa · iOS & Android" },
+  { value: 200, suffix: "+", label: "Countries reached", source: "Musaffa · global audience" },
+  { value: 5, suffix: "", label: "Banking business units", source: "HDFC MyBuddy · enterprise" },
+  { value: 4.8, suffix: "", label: "App-store rating", source: "Musaffa · store average" },
+];
 
 export const PROOF_POINTS = [
   "1.4M+ app downloads",

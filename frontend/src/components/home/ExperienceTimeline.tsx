@@ -21,16 +21,9 @@ function TimelineDetail({ text, tags }: { text: string; tags: string[] }) {
       className="overflow-hidden"
     >
       <p className="pt-3 text-sm leading-relaxed text-sub">{text}</p>
-      <div className="flex flex-wrap gap-2 pt-4">
-        {tags.map((t) => (
-          <span
-            key={t}
-            className="rounded-full border border-hairline px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-faint"
-          >
-            {t}
-          </span>
-        ))}
-      </div>
+      <p className="pt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
+        {tags.join("  ·  ")}
+      </p>
     </motion.div>
   );
 }
@@ -69,14 +62,14 @@ function DesktopTimeline() {
   };
 
   return (
-    <div ref={ref} className="relative mt-14 hidden md:block" data-testid="timeline-desktop">
-      <div className="absolute bottom-2 left-[7px] top-2 w-px bg-hairline" aria-hidden="true" />
+    <div ref={ref} className="relative mt-16 hidden md:block" data-testid="timeline-desktop">
+      <div className="absolute bottom-2 left-[3px] top-2 w-px bg-hairline" aria-hidden="true" />
       <motion.div
-        className="absolute bottom-2 left-[7px] top-2 w-px origin-top bg-signal"
+        className="absolute bottom-2 left-[3px] top-2 w-px origin-top bg-signal"
         style={reduce ? { scaleY: 1 } : { scaleY: scrollYProgress }}
         aria-hidden="true"
       />
-      <ol className="space-y-4">
+      <ol>
         {TIMELINE.map((item, i) => {
           const active = reduce ? true : i === activeIdx;
           return (
@@ -86,10 +79,8 @@ function DesktopTimeline() {
               className="relative pl-12"
             >
               <span
-                className={`absolute left-0 top-2 h-[15px] w-[15px] rounded-full border transition-colors duration-300 ${
-                  active
-                    ? "border-signal bg-signal"
-                    : "border-hairline bg-canvas"
+                className={`absolute left-0 top-[1.9rem] h-[7px] w-[7px] transition-colors duration-300 ${
+                  active ? "bg-signal" : "bg-hairline"
                 }`}
                 aria-hidden="true"
               />
@@ -98,29 +89,30 @@ function DesktopTimeline() {
                 data-testid={`timeline-milestone-${item.id}`}
                 onClick={() => focusItem(i)}
                 aria-expanded={active}
-                className={`w-full border p-6 text-left transition-colors duration-300 ${
-                  active
-                    ? "border-hairline bg-surface/60"
-                    : "border-transparent hover:border-hairline"
+                className={`grid w-full grid-cols-12 gap-x-8 border-t border-hairline py-7 text-left transition-colors duration-300 ${
+                  active ? "text-ink" : "text-faint hover:text-sub"
                 }`}
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-signal">
+                <p className="col-span-3 font-mono text-[11px] uppercase tracking-[0.2em] text-signal">
                   {item.period}
                 </p>
-                <h3 className="mt-2 font-display text-xl font-bold tracking-tight sm:text-2xl">
-                  {item.title}
-                </h3>
-                <p className="mt-1 text-sm text-sub">{item.org}</p>
-                <AnimatePresence initial={false}>
-                  {active && (
-                    <TimelineDetail text={item.detail} tags={item.tags} />
-                  )}
-                </AnimatePresence>
+                <div className="col-span-9">
+                  <h3 className="font-display text-2xl font-bold tracking-[-0.025em] sm:text-3xl">
+                    {item.title}
+                  </h3>
+                  <p className={`mt-1.5 text-sm ${active ? "text-sub" : "text-faint"}`}>{item.org}</p>
+                  <AnimatePresence initial={false}>
+                    {active && (
+                      <TimelineDetail text={item.detail} tags={item.tags} />
+                    )}
+                  </AnimatePresence>
+                </div>
               </button>
             </li>
           );
         })}
       </ol>
+      <div className="border-t border-hairline" aria-hidden="true" />
     </div>
   );
 }
@@ -129,17 +121,17 @@ function MobileTimeline() {
   const [openId, setOpenId] = useState<string>(TIMELINE[0].id);
   return (
     <div className="mt-12 md:hidden" data-testid="timeline-mobile">
-      <ol className="space-y-3">
+      <ol className="border-t border-hairline">
         {TIMELINE.map((item) => {
           const open = openId === item.id;
           return (
-            <li key={item.id} className="border border-hairline">
+            <li key={item.id} className="border-b border-hairline">
               <button
                 type="button"
                 data-testid={`timeline-mobile-milestone-${item.id}`}
                 onClick={() => setOpenId(open ? "" : item.id)}
                 aria-expanded={open}
-                className="flex w-full items-start justify-between gap-4 p-5 text-left"
+                className="flex w-full items-start justify-between gap-4 py-5 text-left"
               >
                 <span>
                   <span className="block font-mono text-[10px] uppercase tracking-[0.25em] text-signal">
@@ -161,7 +153,7 @@ function MobileTimeline() {
               </button>
               <AnimatePresence initial={false}>
                 {open && (
-                  <div className="px-5 pb-5">
+                  <div className="pb-5">
                     <TimelineDetail text={item.detail} tags={item.tags} />
                   </div>
                 )}
@@ -184,11 +176,11 @@ export function ExperienceTimeline() {
     >
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionLabel index="02" title="Experience" />
-        <div className="mt-8 flex flex-wrap items-end justify-between gap-6">
-          <h2 className="font-display text-4xl font-extrabold tracking-tighter sm:text-5xl">
-            <MaskedLines lines={["A short history", "of shipping."]} />
+        <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
+          <h2 className="font-display text-4xl font-bold tracking-[-0.035em] sm:text-5xl lg:col-span-8 lg:text-6xl">
+            <MaskedLines lines={["A short history", <>of <em className="font-serif font-normal italic text-signal">shipping.</em></>]} />
           </h2>
-          <FadeUp delay={0.2}>
+          <FadeUp delay={0.2} className="lg:col-span-4">
             <p className="max-w-sm text-sm leading-relaxed text-sub">
               From an AI & data-science degree to production fintech,
               enterprise banking, desktop market software, and a solo AI SaaS.

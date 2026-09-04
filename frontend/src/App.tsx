@@ -2,10 +2,11 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "sonner";
-import { IntroLoader } from "@/components/IntroLoader";
 import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
 import { EASE } from "@/components/motion/Reveal";
+import { Cursor } from "@/components/ux/Cursor";
+import { TransitionProvider } from "@/components/ux/PageTransition";
 import { initLenis, scrollToTop } from "@/lib/lenis";
 import CaseStudy from "@/pages/CaseStudy";
 import Home from "@/pages/Home";
@@ -84,15 +85,27 @@ export default function App() {
         >
           Skip to content
         </a>
-        <IntroLoader />
         <ScrollManager />
-        <Nav />
-        <AnimatedRoutes />
-        <Footer />
+        <TransitionProvider>
+          <Nav />
+          <AnimatedRoutes />
+          <Footer />
+        </TransitionProvider>
+        <div
+          className="pointer-events-none fixed inset-0 z-[1] hidden opacity-40 lg:block"
+          aria-hidden="true"
+        >
+          <div className="mx-auto grid h-full max-w-7xl grid-cols-12 px-8">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className="border-l border-hairline last:border-r" />
+            ))}
+          </div>
+        </div>
         <div
           className="grain-overlay pointer-events-none fixed inset-0 z-[5] opacity-[0.05] mix-blend-overlay"
           aria-hidden="true"
         />
+        <Cursor />
         <ThemedToaster />
       </BrowserRouter>
     </ThemeProvider>

@@ -14,15 +14,15 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: "dark",
+  theme: "light",
   toggle: () => {},
 });
 
 function currentTheme(): Theme {
-  if (typeof document === "undefined") return "dark";
-  return document.documentElement.classList.contains("light")
-    ? "light"
-    : "dark";
+  if (typeof document === "undefined") return "light";
+  return document.documentElement.classList.contains("dark")
+    ? "dark"
+    : "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

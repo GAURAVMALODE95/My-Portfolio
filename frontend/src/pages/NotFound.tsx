@@ -1,29 +1,28 @@
-import { ArrowLeft, Unplug } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { MaskedLines } from "@/components/motion/Reveal";
+import { Cta } from "@/components/ux/Cta";
+import { useSeo } from "@/hooks/useSeo";
 
 export default function NotFound() {
+  useSeo("404 — Gaurav Malode", "This page does not exist.");
   return (
-    <div className="flex min-h-[100svh] flex-col items-center justify-center px-5 pt-16 text-center" data-testid="not-found-page">
-      <Unplug className="h-8 w-8 text-signal" aria-hidden="true" />
-      <p className="mt-8 font-mono text-xs uppercase tracking-[0.35em] text-faint">
-        Error — Signal lost
+    <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-24 sm:px-8" data-testid="not-found-page">
+      <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-faint">
+        <span className="text-signal">Error</span> — Route not found
       </p>
-      <h1 className="mt-6 font-display text-7xl font-extrabold tracking-tighter sm:text-9xl">
+      <h1 className="mt-6 font-display text-[28vw] font-black leading-[0.82] tracking-[-0.05em] lg:text-[18rem]">
         <MaskedLines lines={["404"]} />
       </h1>
-      <p className="mt-6 max-w-md text-base leading-relaxed text-sub">
-        This route doesn&apos;t exist. The page you were looking for may have
-        moved, or the link was never connected.
-      </p>
-      <Link
-        to="/"
-        data-testid="not-found-home-link"
-        className="group mt-10 inline-flex items-center gap-2 rounded-full bg-signal px-6 py-3.5 font-mono text-xs uppercase tracking-[0.15em] text-canvas transition-colors hover:bg-signal-hover"
-      >
-        <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" aria-hidden="true" />
-        Back to the signal
-      </Link>
+      <div className="mt-10 grid gap-8 border-t border-hairline pt-8 lg:grid-cols-12">
+        <p className="max-w-md text-base leading-relaxed text-sub lg:col-span-7">
+          This route doesn&apos;t exist. The page you were looking for may have moved, or the link was never connected.
+        </p>
+        <div className="lg:col-span-5 lg:flex lg:justify-end">
+          <Cta to="/" testId="not-found-home-link" icon={ArrowLeft}>
+            Back to home
+          </Cta>
+        </div>
+      </div>
     </div>
   );
 }

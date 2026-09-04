@@ -1,142 +1,161 @@
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import {
-  DesktopFrame,
-  IPhoneFrame,
-  SignalChart,
-} from "@/components/DeviceMockups";
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+  useVelocity,
+} from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { useRef, useState, type PointerEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { EASE, FadeUp, MaskedLines, SectionLabel } from "@/components/motion/Reveal";
+import { usePageTransition } from "@/components/ux/PageTransition";
 import { PROJECTS, type Project } from "@/data/projects";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-function CardVisual({ project }: { project: Project }) {
-  const reduce = useReducedMotion();
+const year = (p: Project) => p.timeframe.match(/\d{4}/)?.[0] ?? "";
+
+function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }) {
+  const navigate = useNavigate();
+  const { runTransition } = usePageTransition();
   return (
-    <div className="relative aspect-[4/3] overflow-hidden bg-surface2/50">
-      <motion.div
-        className="absolute inset-0 flex items-center justify-center"
-        initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
-        whileInView={{ clipPath: "inset(0 0 0% 0)" }}
-        viewport={{ once: true, margin: "-10% 0px" }}
-        transition={{ duration: 0.9, ease: EASE }}
-      >
-        <motion.div
-          className="relative flex h-full w-full items-center justify-center p-8 transition-transform duration-500 ease-out group-hover:scale-[1.03] group-focus-visible:scale-[1.03]"
-          initial={reduce ? false : { scale: 1.04 }}
-          whileInView={{ scale: 1.04 }}
-          viewport={{ once: true, margin: "-10% 0px" }}
-          transition={{ duration: 0.9, ease: EASE }}
-        >
-          {project.mockup === "phones" && (
-            <div className="flex items-end justify-center gap-4">
-              <IPhoneFrame
-                src={project.images.primary}
-                alt={project.imageAlts.primary}
-                className="w-[38%] -rotate-3"
-              />
-              <IPhoneFrame
-                src={project.images.secondary}
-                alt={project.imageAlts.secondary}
-                className="w-[38%] rotate-2 translate-y-4"
-              />
-            </div>
-          )}
-          {project.mockup === "phone-desktop" && (
-            <div className="relative w-full max-w-sm">
-              <DesktopFrame
-                src={project.images.secondary}
-                alt={project.imageAlts.secondary}
-                title={project.frameTitle}
-              />
-              <IPhoneFrame
-                src={project.images.primary}
-                alt={project.imageAlts.primary}
-                className="absolute -bottom-6 -right-4 w-[34%]"
-              />
-            </div>
-          )}
-          {(project.mockup === "desktop" || project.mockup === "browser") && (
-            <div className="relative w-full max-w-md">
-              <DesktopFrame
-                src={project.images.primary}
-                alt={project.imageAlts.primary}
-                title={project.frameTitle}
-              />
-              <div className="absolute -bottom-4 -left-4 w-36 border border-hairline bg-surface p-2">
-                <SignalChart className="h-8 w-full text-ink" />
-              </div>
-            </div>
-          )}
-        </motion.div>
-      </motion.div>
+    <Link
+      to={`/work/${project.slug}`}
+      data-testid={`work-card-${project.slug}`}
+      data-cursor="view"
+      data-cursor-label="Open"
+      onPointerEnter={onEnter}
+      onFocus={onEnter}
+      onClick={(e) => {
+        e.preventDefault();
+        runTransition(() => navigate(`/work/${project.slug}`));
+      }}
+      className="group relative grid grid-cols-[2.5rem_1fr_auto] items-center gap-x-4 border-b border-hairline py-7 transition-colors duration-300 hover:bg-surface/70 focus-visible:bg-surface/70 lg:grid-cols-12 lg:gap-x-8 lg:py-9"
+    >
+      <span className="font-mono text-xs text-faint lg:col-span-1">{project.index}</span>
+      <h3 className="font-display text-2xl font-bold leading-none tracking-[-0.03em] transition-transform duration-500 ease-expo group-hover:translate-x-3 sm:text-3xl lg:col-span-5 lg:text-[2.9rem]">
+        {project.product}
+      </h3>
+      <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-sub lg:col-span-3 lg:block">
+        {project.domain}
+      </span>
+      <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-faint lg:col-span-2 lg:block">
+        {project.platforms.slice(0, 2).join(" · ")}
+      </span>
+      <span className="flex items-center justify-end gap-4 lg:col-span-1">
+        <span className="font-mono text-[11px] text-faint">{year(project)}</span>
+        <ArrowUpRight
+          className="h-4 w-4 text-faint transition-all duration-500 ease-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
+          aria-hidden="true"
+        />
+      </span>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/70 to-transparent p-5 pt-12 transition-transform duration-500 ease-out group-hover:translate-y-0 group-focus-visible:translate-y-0">
-        <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-white/90">
-          {project.cardOutcome}
+      <div className="col-span-3 mt-5 lg:hidden">
+        <img
+          src={project.images.primary}
+          alt={project.imageAlts.primary}
+          loading="lazy"
+          className="aspect-[16/10] w-full border border-hairline object-cover"
+        />
+        <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-sub">
+          {project.domain} — {project.platforms.slice(0, 2).join(" · ")}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }
 
-function WorkCard({ project, wide }: { project: Project; wide: boolean }) {
+function Preview({ hover, x, y }: { hover: number | null; x: ReturnType<typeof useSpring>; y: ReturnType<typeof useSpring> }) {
+  const rotate = useTransform(useVelocity(x), [-2000, 2000], [-5, 5]);
+  const active = hover !== null ? PROJECTS[hover] : null;
   return (
-    <FadeUp className={wide ? "lg:col-span-7" : "lg:col-span-5"}>
-      <Link
-        to={`/work/${project.slug}`}
-        data-testid={`work-card-${project.slug}`}
-        className="group block border border-hairline bg-surface/40 transition-colors duration-300 hover:bg-surface focus-visible:bg-surface"
+    <motion.div
+      className="pointer-events-none absolute left-0 top-0 z-20 w-[22rem]"
+      style={{ x, y, rotate }}
+      aria-hidden="true"
+      data-testid="work-preview"
+    >
+      <motion.div
+        className="-translate-x-1/2 -translate-y-1/2 overflow-hidden border border-hairline bg-surface shadow-[0_40px_90px_-30px_rgba(0,0,0,0.55)]"
+        animate={{ scale: active ? 1 : 0.7, opacity: active ? 1 : 0 }}
+        transition={{ type: "spring", stiffness: 260, damping: 26 }}
       >
-        <CardVisual project={project} />
-        <div className="flex items-start justify-between gap-4 border-t border-hairline p-6">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint">
-              {project.index} // {project.domain}
-            </p>
-            <h3 className="mt-2 font-display text-xl font-bold tracking-tight transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1 sm:text-2xl">
-              {project.product}
-            </h3>
-            <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-sub">
-              {project.platforms.join(" · ")}
-            </p>
-            <p className="mt-3 text-sm text-sub lg:hidden">
-              {project.cardOutcome}
-            </p>
-          </div>
-          <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-hairline text-sub transition-all duration-300 group-hover:border-signal group-hover:text-signal group-focus-visible:border-signal group-focus-visible:text-signal">
-            <ArrowUpRight
-              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              aria-hidden="true"
+        <div className="relative aspect-[4/3] bg-surface2">
+          {PROJECTS.map((p, i) => (
+            <motion.img
+              key={p.slug}
+              src={p.images.primary}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+              animate={{ opacity: hover === i ? 1 : 0, scale: hover === i ? 1 : 1.08 }}
+              transition={{ duration: 0.45, ease: EASE }}
             />
-          </span>
+          ))}
         </div>
-      </Link>
-    </FadeUp>
+        <div className="flex items-center justify-between gap-4 border-t border-hairline px-3 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
+          <span className="truncate">{active?.cardOutcome}</span>
+          <span className="shrink-0 text-signal">{active?.index}</span>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
 export function WorkGallery() {
+  const [hover, setHover] = useState<number | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const fine = useMediaQuery("(pointer: fine)");
+  const wide = useMediaQuery("(min-width: 1024px)");
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 220, damping: 28, mass: 0.6 });
+  const sy = useSpring(y, { stiffness: 220, damping: 28, mass: 0.6 });
+
+  const onMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    x.set(e.clientX - r.left);
+    y.set(e.clientY - r.top);
+  };
+
   return (
     <section id="work" className="scroll-mt-24 py-24 sm:py-32" aria-label="Selected work">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <SectionLabel index="01" title="Selected Work" />
-        <div className="mt-8 flex flex-wrap items-end justify-between gap-6">
-          <h2 className="font-display text-4xl font-extrabold tracking-tighter sm:text-5xl lg:text-6xl">
-            <MaskedLines lines={["Production work,", "proven in the wild."]} />
+        <SectionLabel index="01" title="Selected work" />
+        <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
+          <h2 className="font-display text-4xl font-bold tracking-[-0.035em] sm:text-5xl lg:col-span-8 lg:text-6xl">
+            <MaskedLines lines={["Four products,", <>shipped to <em className="font-serif font-normal italic text-signal">real users.</em></>]} />
           </h2>
-          <FadeUp delay={0.2}>
+          <FadeUp delay={0.2} className="lg:col-span-4">
             <p className="max-w-sm text-sm leading-relaxed text-sub">
-              Four products shipped to real users — halal investing at global
-              scale, enterprise banking security, a desktop market terminal,
-              and an AI SaaS built end-to-end.
+              Halal investing at global scale, enterprise banking security, a
+              desktop market terminal, and an AI SaaS built end-to-end.
             </p>
           </FadeUp>
         </div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-12">
+        <div className="mt-6 hidden grid-cols-12 gap-x-8 border-b border-hairline pb-3 font-mono text-[10px] uppercase tracking-[0.25em] text-faint lg:grid">
+          <span className="col-span-1">No.</span>
+          <span className="col-span-5">Product</span>
+          <span className="col-span-3">Domain</span>
+          <span className="col-span-2">Platform</span>
+          <span className="col-span-1 text-right">Year</span>
+        </div>
+
+        <div
+          ref={ref}
+          className="relative mt-10 lg:mt-0"
+          onPointerMove={onMove}
+          onPointerLeave={() => setHover(null)}
+          onBlur={() => setHover(null)}
+          data-testid="work-index"
+        >
           {PROJECTS.map((p, i) => (
-            <WorkCard key={p.slug} project={p} wide={i % 2 === 0} />
+            <WorkRow key={p.slug} project={p} onEnter={() => setHover(i)} />
           ))}
+          {fine && wide && !reduce && <Preview hover={hover} x={sx} y={sy} />}
         </div>
       </div>
     </section>

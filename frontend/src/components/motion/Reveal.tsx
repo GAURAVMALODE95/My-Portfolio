@@ -74,10 +74,10 @@ export function SectionLabel({
 }) {
   return (
     <div className="flex items-center gap-4" data-testid={`section-label-${title.toLowerCase().replace(/\s+/g, "-")}`}>
-      <span className="font-mono text-xs tracking-[0.2em] text-signal">
-        {index} //
+      <span className="font-mono text-[11px] tracking-[0.2em] text-signal">
+        {index}
       </span>
-      <span className="font-mono text-xs uppercase tracking-[0.25em] text-faint">
+      <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-faint">
         {title}
       </span>
       <span className="h-px flex-1 bg-hairline" aria-hidden="true" />

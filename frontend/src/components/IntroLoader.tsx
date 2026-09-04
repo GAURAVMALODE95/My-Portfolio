@@ -50,12 +50,12 @@ export function IntroLoader() {
           />
           <div className="mt-7 overflow-hidden">
             <motion.p
-              className="font-display text-3xl font-extrabold tracking-tight sm:text-5xl"
+              className="font-display text-3xl font-black uppercase tracking-[-0.04em] sm:text-5xl"
               initial={{ y: "112%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.6, ease: EASE, delay: 0.25 }}
             >
-              GAURAV MALODE
+              Gaurav Malode
             </motion.p>
           </div>
           <motion.p
@@ -64,7 +64,7 @@ export function IntroLoader() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.65, duration: 0.4 }}
           >
-            Software Engineer / Fintech / Mobile
+            Software Developer — Fintech · Mobile · Desktop
           </motion.p>
         </motion.div>
       )}

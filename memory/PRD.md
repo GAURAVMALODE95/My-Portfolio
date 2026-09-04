@@ -29,6 +29,14 @@ All sections/routes above; verified: all 6 routes, theme toggle + persistence ac
 - Mockup imagery is placeholder stock in projects.ts — user will swap.
 - No backend/auth → no test credentials.
 
+## Implemented (2026-06 — Design refresh per user feedback)
+- Fonts switched to famous readable set: Poppins (display/headings) + Inter (body), JetBrains Mono for labels. Removed Cabinet Grotesk / Instrument Serif / DM Sans.
+- Default theme is now LIGHT (index.html + ThemeProvider); user can still toggle to dark. theme-color + no-flash script updated.
+- Custom cursor made theme-aware & visible in light mode: solid `bg-ink` dot (default), ink ring (link hover), orange fill (view). Removed white mix-blend-difference.
+- Light-mode contrast improved: darkened --sub (71 73 82) and --faint (107 109 120), muted-foreground 34%.
+- Hero redesigned minimal/editorial (pleurat-inspired): left-aligned medium/large headline (clamp max ~4.1rem, no longer oversized), description + CTAs in right column, 4-up meta strip, big name block kept at bottom.
+- NEW page transition system: `src/components/ux/PageTransition.tsx` — 4 canvas-colored vertical columns slide up staggered on navigation. Wired to: nav links (section + page), Hero "Selected work" CTA, work cards, case-study back + next links. Also plays as intro "Welcome" reveal on first load (replaces old IntroLoader).
+
 ## Backlog
 - P1: Swap in real product screenshots (projects.ts images).
 - P1: Wire REACT_APP_CONTACT_ENDPOINT to a real form service (e.g. Resend/Formspree).
