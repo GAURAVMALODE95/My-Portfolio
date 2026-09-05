@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { DesktopFrame, IPhoneFrame } from "@/components/DeviceMockups";
+import { DesktopFrame, FramedDeviceImg, IPhoneFrame } from "@/components/DeviceMockups";
 import { CountUp, EASE, FadeUp, MaskedLines } from "@/components/motion/Reveal";
 import { caseStudyJsonLd } from "@/components/seo/JsonLd";
 import { usePageTransition } from "@/components/ux/PageTransition";
@@ -20,23 +20,135 @@ const MINI_NAV = [
   { id: "stack", label: "Stack" },
 ];
 
+function PhoneShot({
+  shot,
+  priority,
+  className,
+}: {
+  shot: { src: string; alt: string; label?: string };
+  priority?: boolean;
+  className?: string;
+}) {
+  return (
+    <figure className={`flex flex-col items-center ${className ?? ""}`}>
+      <FramedDeviceImg src={shot.src} alt={shot.alt} priority={priority} className="w-full" />
+      {shot.label && (
+        <figcaption className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-faint">
+          {shot.label}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+function PhoneGallery({
+  shots,
+}: {
+  shots: { src: string; alt: string; label?: string }[];
+}) {
+  const [index, setIndex] = useState(0);
+  const current = shots[index];
+  if (!current) return null;
+
+  const go = (dir: -1 | 1) => {
+    setIndex((i) => (i + dir + shots.length) % shots.length);
+  };
+
+  return (
+    <div className="relative z-[2] w-full bg-canvas" data-testid="phone-gallery">
+      <div className="hidden px-6 py-14 xl:flex xl:items-end xl:justify-center xl:gap-6" data-testid="phone-gallery-wide">
+        {shots.map((shot) => (
+          <PhoneShot key={shot.src} shot={shot} priority className="w-[18%] max-w-[210px]" />
+        ))}
+      </div>
+
+      <div className="hidden px-8 py-14 lg:block xl:hidden" data-testid="phone-gallery-desktop">
+        <div className="mx-auto flex max-w-5xl items-end justify-center gap-10">
+          {shots.slice(0, 3).map((shot) => (
+            <PhoneShot key={shot.src} shot={shot} priority className="w-[30%] max-w-[260px]" />
+          ))}
+        </div>
+        <div className="mx-auto mt-14 flex max-w-5xl items-end justify-center gap-10">
+          {shots.slice(3).map((shot) => (
+            <PhoneShot key={shot.src} shot={shot} className="w-[30%] max-w-[260px]" />
+          ))}
+        </div>
+      </div>
+
+      <div className="lg:hidden" data-testid="phone-gallery-mobile">
+        <div className="flex items-center justify-center gap-4 px-4 py-10">
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            aria-label="Previous screen"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-hairline text-faint transition-colors hover:border-ink hover:text-ink"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <FramedDeviceImg
+            key={current.src}
+            src={current.src}
+            alt={current.alt}
+            priority
+            className="w-full max-w-[260px]"
+          />
+          <button
+            type="button"
+            onClick={() => go(1)}
+            aria-label="Next screen"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-hairline text-faint transition-colors hover:border-ink hover:text-ink"
+          >
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="border-t border-hairline px-5 py-4">
+          <p className="text-center font-mono text-[11px] uppercase tracking-[0.22em] text-sub">
+            {String(index + 1).padStart(2, "0")} / {String(shots.length).padStart(2, "0")}
+            {current.label ? ` — ${current.label}` : ""}
+          </p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            {shots.map((shot, i) => (
+              <button
+                key={shot.src}
+                type="button"
+                onClick={() => setIndex(i)}
+                aria-label={shot.label ?? `Screen ${i + 1}`}
+                aria-current={i === index ? "true" : undefined}
+                className={`h-1.5 w-8 transition-colors ${
+                  i === index ? "bg-ink" : "bg-hairline hover:bg-faint"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CaseVisual({ project }: { project: Project }) {
   const reduce = useReducedMotion();
+  const isFramed = project.mockup === "framed-phones";
   return (
     <motion.div
-      initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
-      whileInView={{ clipPath: "inset(0 0 0% 0)" }}
+      initial={isFramed || reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
+      whileInView={isFramed ? undefined : { clipPath: "inset(0 0 0% 0)" }}
       viewport={{ once: true }}
       transition={{ duration: 1, ease: EASE }}
-      className="overflow-hidden border border-hairline bg-surface2/40"
+      className={`relative z-[2] overflow-hidden border border-hairline ${
+        isFramed ? "bg-canvas" : "bg-surface2/40"
+      }`}
       data-testid="case-hero-visual"
     >
+      {isFramed ? (
+        <PhoneGallery shots={project.gallery ?? []} />
+      ) : (
       <motion.div
         initial={reduce ? false : { scale: 1.04 }}
         whileInView={{ scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1.1, ease: EASE }}
-        className="relative flex min-h-[320px] items-center justify-center p-8 sm:min-h-[420px] sm:p-14"
+        className="relative flex min-h-[320px] items-center justify-center p-8 pt-16 sm:min-h-[480px] sm:p-14 sm:pt-16 lg:min-h-[560px]"
       >
         {(project.mockup === "phones" || project.mockup === "phone-desktop") && (
           <div className="flex items-end justify-center gap-5 sm:gap-8">
@@ -65,6 +177,7 @@ function CaseVisual({ project }: { project: Project }) {
           </div>
         )}
       </motion.div>
+      )}
     </motion.div>
   );
 }

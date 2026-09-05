@@ -25,7 +25,7 @@ function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }
       className="group relative grid grid-cols-[2.5rem_1fr_auto] items-center gap-x-4 border-b border-hairline py-7 transition-colors duration-300 hover:bg-surface/70 focus-visible:bg-surface/70 lg:grid-cols-12 lg:gap-x-8 lg:py-9"
     >
       <span className="font-mono text-xs text-faint lg:col-span-1">{project.index}</span>
-      <h3 className="font-display text-2xl font-bold leading-none tracking-[-0.03em] transition-transform duration-500 ease-expo group-hover:translate-x-3 sm:text-3xl lg:col-span-4 lg:text-[2.9rem]">
+      <h3 className="font-display text-2xl font-bold leading-[1.32] tracking-[-0.03em] transition-transform duration-500 ease-expo group-hover:translate-x-3 sm:text-3xl sm:leading-[1.32] lg:col-span-4 lg:text-[2.9rem] lg:leading-[1.32]">
         {project.product}
       </h3>
       <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-sub lg:col-span-3 lg:block">
@@ -50,7 +50,11 @@ function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }
           alt={project.imageAlts.primary}
           loading="lazy"
           decoding="async"
-          className="aspect-[16/10] w-full border border-hairline object-cover"
+          className={
+            project.mockup === "framed-phones"
+              ? "mx-auto max-h-80 w-auto object-contain"
+              : "aspect-[16/10] w-full border border-hairline object-cover"
+          }
         />
         <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-sub">
           {project.domain} — {project.platforms.slice(0, 2).join(" · ")}
@@ -191,7 +195,9 @@ function Preview({ hover }: { hover: number | null }) {
               alt=""
               decoding="async"
               draggable={false}
-              className="gm-work-preview-img absolute inset-0 h-full w-full object-cover"
+              className={`gm-work-preview-img absolute inset-0 h-full w-full ${
+                p.mockup === "framed-phones" ? "object-contain p-5" : "object-cover"
+              }`}
               style={{ opacity: 0, transform: "scale(1.08)" }}
             />
           ))}
@@ -217,7 +223,7 @@ export function WorkGallery() {
         <SectionLabel index="01" title="Selected work" />
         <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
           <h2 className="font-display text-4xl font-bold leading-[1.15] tracking-[-0.035em] sm:text-5xl lg:col-span-8 lg:text-6xl">
-            <MaskedLines lines={["Four products,", <>shipped to <em className="font-serif font-normal italic text-signal">real users.</em></>]} />
+            <MaskedLines lines={["Selected work,", <>shipped to <em className="font-serif font-normal italic text-signal">real users.</em></>]} />
           </h2>
           <FadeUp delay={0.2} className="lg:col-span-4">
             <p className="max-w-sm text-sm leading-relaxed text-sub">
