@@ -9,7 +9,15 @@ const IMG = {
     "https://images.unsplash.com/photo-1720962158937-7ea890052166?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwzfHxkYXJrJTIwdWklMjBkYXNoYm9hcmQlMjBzb2Z0d2FyZXxlbnwwfHx8fDE3ODc4MTg0NTV8MA&ixlib=rb-4.1.0&q=85",
 };
 
-export type MockupKind = "phones" | "phone-desktop" | "desktop" | "browser";
+export type MockupKind = "phones" | "phone-desktop" | "desktop" | "browser" | "framed-phones";
+
+const MUSAFFA_IMG = {
+  login: "/Images/Musaffa/musaffa_login_screen.png?v=2",
+  ticker: "/Images/Musaffa/musaffa_ticker_details_screen.png?v=2",
+  news: "/Images/Musaffa/musaffa_news_screen.png?v=2",
+  courses: "/Images/Musaffa/musaffa_courses_screen.png?v=2",
+  investments: "/Images/Musaffa/musaffa_my_investments_screen.png?v=2",
+};
 
 export interface CaseBlock {
   title: string;
@@ -39,6 +47,7 @@ export interface Project {
   frameTitle: string;
   images: { primary: string; secondary: string };
   imageAlts: { primary: string; secondary: string };
+  gallery?: { src: string; alt: string; label?: string }[];
   nda?: boolean;
   overview: string[];
   scope: CaseBlock[];
@@ -62,14 +71,40 @@ export const PROJECTS: Project[] = [
     impact:
       "Core product engineering for a halal investing app used by 1.4M+ people across 200+ countries.",
     cardOutcome: "1.4M+ downloads · 4.8 rating · 200+ countries",
-    mockup: "phones",
+    mockup: "framed-phones",
     frameTitle: "musaffa.app",
-    images: { primary: IMG.mobile1, secondary: IMG.mobile2 },
+    images: { primary: MUSAFFA_IMG.ticker, secondary: MUSAFFA_IMG.news },
     imageAlts: {
-      primary: "Musaffa app shown in an iPhone frame — placeholder screen",
-      secondary:
-        "Musaffa market screen shown in a second iPhone frame — placeholder screen",
+      primary: "Musaffa stock details — Apple Inc Shariah compliance screen in an iPhone",
+      secondary: "Musaffa Markets news feed in an iPhone",
     },
+    gallery: [
+      {
+        src: MUSAFFA_IMG.login,
+        alt: "Musaffa sign-up screen — start your Halal Investment Journey",
+        label: "Sign up",
+      },
+      {
+        src: MUSAFFA_IMG.ticker,
+        alt: "Musaffa Shariah compliance — Apple Inc HALAL screening and financial gauge",
+        label: "Shariah compliance",
+      },
+      {
+        src: MUSAFFA_IMG.news,
+        alt: "Musaffa Markets news feed with watchlist and portfolio navigation",
+        label: "Market news",
+      },
+      {
+        src: MUSAFFA_IMG.investments,
+        alt: "My Musaffa Investments dashboard with totals, shares, and invest again",
+        label: "Investments",
+      },
+      {
+        src: MUSAFFA_IMG.courses,
+        alt: "Musaffa course lesson — Why invest the halal way",
+        label: "Courses",
+      },
+    ],
     overview: [
       "Musaffa is a halal investing platform that helps a global Muslim audience research stocks and ETFs, check Shariah compliance, and follow markets — 1.4M+ downloads, a 4.8 store rating, and users across 200+ countries.",
       "I engineer core product modules on the Flutter app: Stock Details, ETF Details, Shariah compliance reports, Market News, and the Investor Dashboard — all wired to live financial data APIs.",

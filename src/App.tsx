@@ -29,6 +29,7 @@ function AnimatedRoutes() {
       <motion.main
         id="main-content"
         key={location.pathname}
+        className="relative z-[2]"
         initial={{ opacity: 0, y: reduce ? 0 : 14 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: reduce ? 0 : -10 }}
@@ -58,7 +59,7 @@ function PageAtmosphere() {
   return (
     <>
       <div
-        className="pointer-events-none fixed inset-0 z-[1] hidden opacity-40 lg:block"
+        className="pointer-events-none fixed inset-0 z-0 hidden opacity-40 lg:block"
         aria-hidden="true"
       >
         <div className="mx-auto grid h-full max-w-7xl grid-cols-12 px-8">
@@ -68,7 +69,7 @@ function PageAtmosphere() {
         </div>
       </div>
       <div
-        className="grain-overlay pointer-events-none fixed inset-0 z-[5] opacity-[0.05] mix-blend-overlay"
+        className="grain-overlay pointer-events-none fixed inset-0 z-0 opacity-[0.05] mix-blend-overlay"
         aria-hidden="true"
       />
     </>
