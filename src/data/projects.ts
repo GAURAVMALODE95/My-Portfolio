@@ -37,6 +37,13 @@ const TERMINAL_IMG = {
   business: "/Images/terminal/Terminal__business.png?v=1",
 };
 
+const STOLITY_IMG = {
+  login: "/Images/stolity/stolity_login.png?v=1",
+  filelist: "/Images/stolity/stolity_filelist.png?v=1",
+  options: "/Images/stolity/stolity_options.png?v=1",
+  upgrade: "/Images/stolity/stolity_upgrade.png?v=1",
+};
+
 export interface CaseBlock {
   title: string;
   body: string;
@@ -362,8 +369,114 @@ export const PROJECTS: Project[] = [
       "Desktop users judge a terminal by its worst frame. Caching, deduplication, and concurrency budgets are product features — they just live below the UI.",
   },
   {
-    slug: "resumeforge",
+    slug: "stolity",
     index: "04",
+    product: "Stolity",
+    title: "Stolity — File Management",
+    domain: "PRODUCTIVITY / CLOUD STORAGE",
+    platforms: ["React Native", "iOS", "Android"],
+    stack: [
+      "React Native",
+      "TypeScript",
+      "Node.js",
+      "Firebase",
+      "RevenueCat",
+      "Remote Config",
+    ],
+    role: "Software Developer — React Native app (majority owner)",
+    timeframe: "2024 — Present",
+    impact:
+      "A consumer file app — upload, organize, and share like Drive — where I rebuilt large-file transfers and moved subscriptions onto Firebase and RevenueCat.",
+    cardOutcome: "Chunked uploads · RevenueCat · remote feature flags",
+    mockup: "framed-phones",
+    frameTitle: "Stolity — All Files",
+    images: { primary: STOLITY_IMG.filelist, secondary: STOLITY_IMG.options },
+    imageAlts: {
+      primary: "Stolity All Files screen — folders and documents in an iPhone",
+      secondary: "Stolity file actions sheet with share, download, and copy short link",
+    },
+    gallery: [
+      {
+        src: STOLITY_IMG.login,
+        title: "Stolity — Sign In",
+        alt: "Stolity sign-in screen with email, password, and social login",
+        label: "Sign in",
+      },
+      {
+        src: STOLITY_IMG.filelist,
+        title: "Stolity — All Files",
+        alt: "Stolity All Files list with folders, documents, search, and an add button",
+        label: "All files",
+      },
+      {
+        src: STOLITY_IMG.options,
+        title: "Stolity — File Actions",
+        alt: "Stolity file actions sheet showing share, download, rename, and copy short link",
+        label: "File actions",
+      },
+      {
+        src: STOLITY_IMG.upgrade,
+        title: "Stolity — Upgrade Plan",
+        alt: "Stolity upgrade plan screen with monthly and annual subscription options",
+        label: "Plans",
+      },
+    ],
+    overview: [
+      "Stolity is a consumer file-management app for everyday people — store photos, videos, and documents in the cloud, organize them, and share them. Think Google Drive.",
+      "I own most of the React Native iOS and Android app, talking to Node.js APIs. The codebase was inherited; I modularized it, and I redesigned uploads so large files actually finish.",
+    ],
+    scope: [
+      {
+        title: "Modular RN architecture",
+        body: "Refactored the app by splitting business logic from UI, isolating service layers, and extracting reusable components — so the file browser, transfers, and account flows could change without stepping on each other.",
+      },
+      {
+        title: "File transfer redesign",
+        body: "Rebuilt uploads from the ground up: chunked transfers, background processing, retries, and live progress — the work I led so a 5 GB file survives a flaky connection.",
+      },
+      {
+        title: "Subscriptions that match web",
+        body: "Replaced custom subscription and storage APIs with Firebase plus RevenueCat so entitlements stay consistent between the website and the app.",
+      },
+      {
+        title: "Remote flags and RBAC",
+        body: "A remote-config layer for premium features, domain-specific plans, and entitlements — plus remotely configurable roles: full-premium, feature-level access, and read-only — without shipping an app update.",
+      },
+    ],
+    build: [
+      {
+        title: "UI, services, and reusable pieces",
+        body: "Business logic moved behind service modules; screens consume them instead of owning network and storage rules. Shared components keep the file list, sheets, and account surfaces consistent and cheaper to extend.",
+      },
+      {
+        title: "Chunked uploads that recover",
+        body: "Files go up in chunks, keep transferring in the background, retry failed parts, and report progress in real time. That is what made large-file reliability a product feature instead of a support ticket.",
+      },
+      {
+        title: "Firebase + RevenueCat entitlements",
+        body: "Store purchases and storage quotas now flow through RevenueCat and Firebase instead of one-off APIs, so a plan bought on the phone matches what the web already knows.",
+      },
+      {
+        title: "Flags and roles without a release",
+        body: "Remote config gates premium features and plan variants. RBAC can grant full-premium, trim access to specific features, or lock a user to read-only — flipped from the server, not a store review.",
+      },
+    ],
+    outcomes: [
+      { display: "iOS + Android", label: "One React Native TypeScript codebase" },
+      { display: "Chunked", label: "Uploads with background retry and live progress" },
+      { display: "RevenueCat", label: "Subscriptions aligned with web via Firebase" },
+      { display: "Remote", label: "Feature flags and entitlements without app updates" },
+      { display: "RBAC", label: "Full-premium, feature-level, and read-only modes" },
+      { display: "5 GB", label: "Per-file uploads the transfer layer was rebuilt for" },
+    ],
+    qualitativeOutcome:
+      "The mobile app is maintainable enough to keep shipping, large uploads complete instead of dying mid-transfer, and plan access is the same story on web and phone.",
+    lesson:
+      "A file app is judged by the upload that almost failed. Chunks, retries, and background work are the product — the file list is just where you see that they worked.",
+  },
+  {
+    slug: "resumeforge",
+    index: "05",
     product: "ResumeForge",
     title: "ResumeForge — AI Resume Tailoring SaaS",
     domain: "AI PRODUCT / FULL-STACK",

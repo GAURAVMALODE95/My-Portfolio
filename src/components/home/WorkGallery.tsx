@@ -34,12 +34,12 @@ function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }
       <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-faint lg:col-span-2 lg:block">
         {project.platforms.slice(0, 2).join(" · ")}
       </span>
-      <span className="flex items-center justify-end gap-4 lg:col-span-2">
-        <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-sub lg:inline">
+      <span className="flex min-w-0 items-center justify-end gap-4 lg:col-span-2">
+        <span className="hidden min-w-0 truncate font-mono text-[11px] uppercase tracking-[0.2em] text-sub lg:inline">
           {project.stack.slice(0, 2).join(" · ")}
         </span>
         <ArrowUpRight
-          className="h-4 w-4 text-faint transition-all duration-500 ease-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
+          className="h-4 w-4 shrink-0 text-faint transition-all duration-500 ease-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
           aria-hidden="true"
         />
       </span>
@@ -230,7 +230,8 @@ export function WorkGallery() {
           <FadeUp delay={0.2} className="lg:col-span-4">
             <p className="max-w-sm text-sm leading-relaxed text-sub">
               Halal investing at global scale, enterprise banking security, a
-              desktop market terminal, and an AI SaaS built end-to-end.
+              desktop market terminal, a consumer file app, and an AI SaaS built
+              end-to-end.
             </p>
           </FadeUp>
         </div>

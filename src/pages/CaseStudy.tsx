@@ -478,11 +478,11 @@ export default function CaseStudy() {
       <section id="outcomes" aria-labelledby="outcomes-heading" className="border-t border-hairline bg-surface/30">
         <div className="mx-auto max-w-7xl scroll-mt-32 px-5 py-20 sm:px-8 sm:py-28">
           <SectionHeading id="outcomes" index="04" title="Results & impact" />
-          <div className="mt-12 grid grid-cols-2 gap-px border border-hairline bg-hairline md:grid-cols-3 lg:grid-cols-5">
+          <div className="mt-12 grid grid-cols-1 gap-px border border-hairline bg-hairline sm:grid-cols-2 lg:grid-cols-3">
             {project.outcomes.map((o, i) => (
-              <FadeUp key={o.label} delay={i * 0.07} className="bg-canvas">
-                <div className="h-full p-6 sm:p-8" data-testid={`case-outcome-${i}`}>
-                  <p className="font-display text-4xl font-bold tracking-[-0.03em] sm:text-5xl">
+              <FadeUp key={o.label} delay={i * 0.07} className="min-w-0 bg-canvas">
+                <div className="h-full min-w-0 p-6 sm:p-8" data-testid={`case-outcome-${i}`}>
+                  <p className="min-w-0 break-words font-display text-3xl font-bold leading-[1.15] tracking-[-0.03em] sm:text-4xl">
                     {o.countTo !== undefined ? (
                       <CountUp to={o.countTo} suffix={o.suffix ?? ""} />
                     ) : (

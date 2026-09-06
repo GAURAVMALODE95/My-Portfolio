@@ -51,7 +51,7 @@ export const CAPABILITIES: CapabilityCategory[] = [
       "RASP",
     ],
     note: "Cross-platform apps shipped to the App Store, Google Play, and enterprise desktop — hardened with SSL pinning and runtime protections.",
-    related: ["Musaffa", "MyBuddy", "Infomanav Terminal"],
+    related: ["Musaffa", "MyBuddy", "Infomanav Terminal", "Stolity"],
   },
   {
     id: "web-backend",
@@ -66,14 +66,14 @@ export const CAPABILITIES: CapabilityCategory[] = [
       "Storage",
     ],
     note: "REST APIs and web products in Node.js, FastAPI, and React, backed by Firebase Auth, Firestore, and Storage.",
-    related: ["Infomanav Terminal", "ResumeForge"],
+    related: ["Infomanav Terminal", "Stolity", "ResumeForge"],
   },
   {
     id: "languages",
     label: "Languages",
     tags: ["Dart", "Python", "JavaScript", "TypeScript", "SQL"],
     note: "Polyglot by necessity — Dart for Flutter, TypeScript for product web, Python for FastAPI services, SQL for data.",
-    related: ["Musaffa", "Infomanav Terminal", "ResumeForge"],
+    related: ["Musaffa", "Infomanav Terminal", "Stolity", "ResumeForge"],
   },
   {
     id: "architecture",
@@ -85,7 +85,7 @@ export const CAPABILITIES: CapabilityCategory[] = [
       "Reusable component design",
     ],
     note: "Clean Architecture and SOLID keep regulated fintech codebases testable and safe to change under release pressure.",
-    related: ["Musaffa", "MyBuddy", "Infomanav Terminal"],
+    related: ["Musaffa", "MyBuddy", "Infomanav Terminal", "Stolity"],
   },
   {
     id: "data-infra",
@@ -97,9 +97,10 @@ export const CAPABILITIES: CapabilityCategory[] = [
       "Syncfusion charts",
       "JWT auth",
       "Feature flags",
+      "RevenueCat",
     ],
-    note: "Market-data plumbing: Finnhub with TTL caching, Typesense search, WebSocket live prices, Syncfusion charting, JWT auth, and feature flags.",
-    related: ["Musaffa", "Infomanav Terminal"],
+    note: "Market-data plumbing: Finnhub with TTL caching, Typesense search, WebSocket live prices, Syncfusion charting, JWT auth, and feature flags — plus RevenueCat entitlements on Stolity.",
+    related: ["Musaffa", "Infomanav Terminal", "Stolity"],
   },
   {
     id: "toolkit",
@@ -150,9 +151,9 @@ export const TIMELINE: TimelineItem[] = [
     id: "production-fintech",
     period: "2024 — PRESENT",
     title: "Production fintech & enterprise mobile work",
-    org: "Musaffa · MyBuddy · Infomanav Terminal",
+    org: "Musaffa · MyBuddy · Infomanav Terminal · Stolity",
     detail:
-      "Core modules for a 1.4M+-download halal investing app, security hardening and VAPT remediation for HDFC enterprise banking across five business units, and a Flutter desktop market terminal for macOS and Windows.",
+      "Core modules for a 1.4M+-download halal investing app, security hardening and VAPT remediation for HDFC enterprise banking across five business units, a Flutter desktop market terminal for macOS and Windows, and the Stolity React Native file app.",
     tags: ["1.4M+ downloads", "5 banking units", "Desktop"],
   },
   {
