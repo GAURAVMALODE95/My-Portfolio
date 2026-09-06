@@ -9,7 +9,17 @@ const IMG = {
     "https://images.unsplash.com/photo-1720962158937-7ea890052166?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwzfHxkYXJrJTIwdWklMjBkYXNoYm9hcmQlMjBzb2Z0d2FyZXxlbnwwfHx8fDE3ODc4MTg0NTV8MA&ixlib=rb-4.1.0&q=85",
 };
 
-export type MockupKind = "phones" | "phone-desktop" | "desktop" | "browser" | "framed-phones";
+export type MockupKind =
+  | "phones"
+  | "phone-desktop"
+  | "desktop"
+  | "browser"
+  | "framed-phones"
+  | "framed-laptops";
+
+export function isFramedDevice(mockup: MockupKind) {
+  return mockup === "framed-phones" || mockup === "framed-laptops";
+}
 
 const MUSAFFA_IMG = {
   login: "/Images/Musaffa/musaffa_login_screen.png?v=2",
@@ -17,6 +27,14 @@ const MUSAFFA_IMG = {
   news: "/Images/Musaffa/musaffa_news_screen.png?v=2",
   courses: "/Images/Musaffa/musaffa_courses_screen.png?v=2",
   investments: "/Images/Musaffa/musaffa_my_investments_screen.png?v=2",
+};
+
+const TERMINAL_IMG = {
+  dashboard: "/Images/terminal/Terminal__dashboard.png?v=1",
+  watchlist: "/Images/terminal/Terminal_watchlist.png?v=1",
+  screener: "/Images/terminal/Terminal__screener.png?v=1",
+  portfolio: "/Images/terminal/Terminal__portfolio.png?v=1",
+  business: "/Images/terminal/Terminal__business.png?v=1",
 };
 
 export interface CaseBlock {
@@ -47,7 +65,7 @@ export interface Project {
   frameTitle: string;
   images: { primary: string; secondary: string };
   imageAlts: { primary: string; secondary: string };
-  gallery?: { src: string; alt: string; label?: string }[];
+  gallery?: { src: string; alt: string; label?: string; title?: string }[];
   nda?: boolean;
   overview: string[];
   scope: CaseBlock[];
@@ -252,13 +270,47 @@ export const PROJECTS: Project[] = [
     impact:
       "A Flutter desktop market workstation for macOS and Windows, backed by purpose-built Node.js market-data APIs.",
     cardOutcome: "macOS + Windows · live prices · research, screeners, portfolios",
-    mockup: "desktop",
-    frameTitle: "infomanav — terminal",
-    images: { primary: IMG.desktop1, secondary: IMG.desktop2 },
+    mockup: "framed-laptops",
+    frameTitle: "Infomanav Terminal — Dashboard",
+    images: { primary: TERMINAL_IMG.dashboard, secondary: TERMINAL_IMG.screener },
     imageAlts: {
-      primary: "Infomanav Terminal desktop workstation — placeholder screen",
-      secondary: "Terminal research and screener view — placeholder screen",
+      primary:
+        "Infomanav Terminal dashboard — live market indices, sector performance, and market charts",
+      secondary:
+        "Infomanav Terminal stock screener — fundamental filters and company results table",
     },
+    gallery: [
+      {
+        src: TERMINAL_IMG.dashboard,
+        title: "Infomanav Terminal — Dashboard",
+        alt: "Infomanav Terminal dashboard showing live market indices, sector performance, and a market chart",
+        label: "Dashboard",
+      },
+      {
+        src: TERMINAL_IMG.watchlist,
+        title: "Infomanav Terminal — Watchlist",
+        alt: "Infomanav Terminal watchlist with tracked stocks, performance charts, and Apple key stats",
+        label: "Watchlist",
+      },
+      {
+        src: TERMINAL_IMG.screener,
+        title: "Infomanav Terminal — Stock Screener",
+        alt: "Infomanav Terminal stock screener with fundamental filters and a company results table",
+        label: "Screener",
+      },
+      {
+        src: TERMINAL_IMG.portfolio,
+        title: "Infomanav Terminal — Model Portfolio",
+        alt: "Infomanav Terminal model portfolio creator with holdings allocation and summary",
+        label: "Portfolio",
+      },
+      {
+        src: TERMINAL_IMG.business,
+        title: "Infomanav Terminal — Business Research",
+        alt: "Infomanav Terminal business research for Apple showing product mix and geography revenue",
+        label: "Business",
+      },
+    ],
     overview: [
       "Infomanav Terminal is a Flutter desktop market workstation for macOS and Windows: live prices, stock and ETF research, screeners, watchlists, portfolios, earnings, and Shariah compliance in one surface.",
       "I built the Flutter desktop client and designed the Node.js REST APIs behind it — JWT auth, per-user feature flags, watchlists, trading ideas, portfolios, and screener strategies.",

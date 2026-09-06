@@ -6,6 +6,7 @@ export interface SeoOptions {
   noindex?: boolean;
   type?: "website" | "article";
   image?: string;
+  imageAlt?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
@@ -47,7 +48,14 @@ function ensureJsonLd(id: string, data: unknown) {
 }
 
 export function useSeo(title: string, description: string, options: SeoOptions = {}) {
-  const { path = "/", noindex = false, type = "website", image = OG_IMAGE_PATH, jsonLd } = options;
+  const {
+    path = "/",
+    noindex = false,
+    type = "website",
+    image = OG_IMAGE_PATH,
+    imageAlt,
+    jsonLd,
+  } = options;
   const jsonLdKey = jsonLd ? JSON.stringify(jsonLd) : "";
 
   useEffect(() => {
@@ -67,6 +75,7 @@ export function useSeo(title: string, description: string, options: SeoOptions =
     ensureMeta("property", "og:url", url);
     ensureMeta("property", "og:image", imageUrl);
     ensureMeta("property", "og:image:secure_url", imageUrl);
+    if (imageAlt) ensureMeta("property", "og:image:alt", imageAlt);
     ensureMeta("name", "twitter:title", fullTitle);
     ensureMeta("name", "twitter:description", description);
     ensureMeta("name", "twitter:image", imageUrl);
@@ -79,7 +88,7 @@ export function useSeo(title: string, description: string, options: SeoOptions =
         if (el) el.remove();
       }
     };
-  }, [title, description, path, noindex, type, image, jsonLdKey]);
+  }, [title, description, path, noindex, type, image, imageAlt, jsonLdKey]);
 }
 
 export { SITE_URL };

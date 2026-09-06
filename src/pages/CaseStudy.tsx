@@ -7,7 +7,7 @@ import { CountUp, EASE, FadeUp, MaskedLines } from "@/components/motion/Reveal";
 import { caseStudyJsonLd } from "@/components/seo/JsonLd";
 import { usePageTransition } from "@/components/ux/PageTransition";
 import { Tag } from "@/components/ux/Tag";
-import { getProject, nextProject, type Project } from "@/data/projects";
+import { getProject, isFramedDevice, nextProject, type Project } from "@/data/projects";
 import { useSeo } from "@/hooks/useSeo";
 import { scrollToId } from "@/lib/lenis";
 import NotFound from "@/pages/NotFound";
@@ -25,7 +25,7 @@ function PhoneShot({
   priority,
   className,
 }: {
-  shot: { src: string; alt: string; label?: string };
+  shot: { src: string; alt: string; label?: string; title?: string };
   priority?: boolean;
   className?: string;
 }) {
@@ -41,10 +41,14 @@ function PhoneShot({
   );
 }
 
-function PhoneGallery({
+function GalleryMobile({
   shots,
+  imageClassName,
+  testId,
 }: {
-  shots: { src: string; alt: string; label?: string }[];
+  shots: { src: string; alt: string; label?: string; title?: string }[];
+  imageClassName: string;
+  testId: string;
 }) {
   const [index, setIndex] = useState(0);
   const current = shots[index];
@@ -54,6 +58,78 @@ function PhoneGallery({
     setIndex((i) => (i + dir + shots.length) % shots.length);
   };
 
+  return (
+    <div data-testid={testId}>
+      <div className="relative px-5 py-8">
+        <FramedDeviceImg
+          key={current.src}
+          src={current.src}
+          alt={current.alt}
+          priority
+          className={imageClassName}
+        />
+        <button
+          type="button"
+          onClick={() => go(-1)}
+          aria-label="Previous screen"
+          className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-ink bg-canvas text-ink shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => go(1)}
+          aria-label="Next screen"
+          className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-ink bg-canvas text-ink shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+        >
+          <ArrowRight className="h-5 w-5" />
+        </button>
+      </div>
+      <div className="flex items-center justify-between gap-3 border-t border-hairline px-5 py-4">
+        <button
+          type="button"
+          onClick={() => go(-1)}
+          aria-label="Previous screen"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-ink bg-canvas text-ink"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+        <p className="min-w-0 text-center font-mono text-[11px] uppercase tracking-[0.22em] text-sub">
+          {String(index + 1).padStart(2, "0")} / {String(shots.length).padStart(2, "0")}
+          {current.label ? ` — ${current.label}` : ""}
+        </p>
+        <button
+          type="button"
+          onClick={() => go(1)}
+          aria-label="Next screen"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-ink bg-canvas text-ink"
+        >
+          <ArrowRight className="h-5 w-5" />
+        </button>
+      </div>
+      <div className="flex flex-wrap items-center justify-center gap-2 px-5 pb-5">
+        {shots.map((shot, i) => (
+          <button
+            key={shot.src}
+            type="button"
+            onClick={() => setIndex(i)}
+            aria-label={shot.label ?? `Screen ${i + 1}`}
+            aria-current={i === index ? "true" : undefined}
+            className={`h-1.5 w-8 transition-colors ${
+              i === index ? "bg-ink" : "bg-hairline hover:bg-faint"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PhoneGallery({
+  shots,
+}: {
+  shots: { src: string; alt: string; label?: string; title?: string }[];
+}) {
   return (
     <div className="relative z-[2] w-full bg-canvas" data-testid="phone-gallery">
       <div className="hidden px-6 py-14 xl:flex xl:items-end xl:justify-center xl:gap-6" data-testid="phone-gallery-wide">
@@ -75,68 +151,50 @@ function PhoneGallery({
         </div>
       </div>
 
-      <div className="lg:hidden" data-testid="phone-gallery-mobile">
-        <div className="relative px-5 py-8">
-          <FramedDeviceImg
-            key={current.src}
-            src={current.src}
-            alt={current.alt}
-            priority
-            className="mx-auto w-full max-w-[280px]"
-          />
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            aria-label="Previous screen"
-            className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-ink bg-canvas text-ink shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => go(1)}
-            aria-label="Next screen"
-            className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-ink bg-canvas text-ink shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
-          >
-            <ArrowRight className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="flex items-center justify-between gap-3 border-t border-hairline px-5 py-4">
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            aria-label="Previous screen"
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-ink bg-canvas text-ink"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-          <p className="min-w-0 text-center font-mono text-[11px] uppercase tracking-[0.22em] text-sub">
-            {String(index + 1).padStart(2, "0")} / {String(shots.length).padStart(2, "0")}
-            {current.label ? ` — ${current.label}` : ""}
-          </p>
-          <button
-            type="button"
-            onClick={() => go(1)}
-            aria-label="Next screen"
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-ink bg-canvas text-ink"
-          >
-            <ArrowRight className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-2 px-5 pb-5">
-          {shots.map((shot, i) => (
-            <button
+      <div className="lg:hidden">
+        <GalleryMobile
+          shots={shots}
+          imageClassName="mx-auto w-full max-w-[280px]"
+          testId="phone-gallery-mobile"
+        />
+      </div>
+    </div>
+  );
+}
+
+function LaptopGallery({
+  shots,
+}: {
+  shots: { src: string; alt: string; label?: string; title?: string }[];
+}) {
+  const oddLast = shots.length % 2 === 1;
+  return (
+    <div className="relative z-[2] w-full bg-canvas" data-testid="laptop-gallery">
+      <div
+        className="hidden grid-cols-2 gap-x-8 gap-y-12 px-6 py-12 md:grid lg:gap-x-10 lg:px-10 lg:py-14"
+        data-testid="laptop-gallery-desktop"
+      >
+        {shots.map((shot, i) => {
+          const centerLast = oddLast && i === shots.length - 1;
+          return (
+            <PhoneShot
               key={shot.src}
-              type="button"
-              onClick={() => setIndex(i)}
-              aria-label={shot.label ?? `Screen ${i + 1}`}
-              aria-current={i === index ? "true" : undefined}
-              className={`h-1.5 w-8 transition-colors ${
-                i === index ? "bg-ink" : "bg-hairline hover:bg-faint"
-              }`}
+              shot={shot}
+              priority={i < 2}
+              className={
+                centerLast ? "col-span-2 mx-auto w-[calc(50%-1rem)]" : "w-full"
+              }
             />
-          ))}
-        </div>
+          );
+        })}
+      </div>
+
+      <div className="md:hidden">
+        <GalleryMobile
+          shots={shots}
+          imageClassName="mx-auto h-auto w-full object-contain"
+          testId="laptop-gallery-mobile"
+        />
       </div>
     </div>
   );
@@ -144,20 +202,22 @@ function PhoneGallery({
 
 function CaseVisual({ project }: { project: Project }) {
   const reduce = useReducedMotion();
-  const isFramed = project.mockup === "framed-phones";
+  const isFramed = isFramedDevice(project.mockup);
   return (
     <motion.div
       initial={isFramed || reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
       whileInView={isFramed ? undefined : { clipPath: "inset(0 0 0% 0)" }}
       viewport={{ once: true }}
       transition={{ duration: 1, ease: EASE }}
-      className={`relative z-[2] overflow-hidden border border-hairline ${
-        isFramed ? "bg-canvas" : "bg-surface2/40"
+      className={`relative z-[2] border border-hairline ${
+        isFramed ? "overflow-visible bg-canvas" : "overflow-hidden bg-surface2/40"
       }`}
       data-testid="case-hero-visual"
     >
-      {isFramed ? (
+      {project.mockup === "framed-phones" ? (
         <PhoneGallery shots={project.gallery ?? []} />
+      ) : project.mockup === "framed-laptops" ? (
+        <LaptopGallery shots={project.gallery ?? []} />
       ) : (
       <motion.div
         initial={reduce ? false : { scale: 1.04 }}
@@ -268,10 +328,13 @@ export default function CaseStudy() {
       ? {
           path: `/work/${project.slug}`,
           type: "article",
+          image: project.images.primary,
+          imageAlt: project.imageAlts.primary,
           jsonLd: caseStudyJsonLd({
             title: project.title,
             description: project.impact,
             slug: project.slug,
+            image: project.images.primary,
           }),
         }
       : { path: "/404", noindex: true },

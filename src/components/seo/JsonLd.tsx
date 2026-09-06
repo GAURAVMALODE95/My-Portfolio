@@ -67,6 +67,7 @@ export function caseStudyJsonLd(input: {
   title: string;
   description: string;
   slug: string;
+  image?: string;
   date?: string;
 }) {
   return {
@@ -78,7 +79,7 @@ export function caseStudyJsonLd(input: {
     mainEntityOfPage: absoluteUrl(`/work/${input.slug}`),
     author: { "@id": `${SITE_URL}/#person` },
     publisher: { "@id": `${SITE_URL}/#person` },
-    image: absoluteUrl("/og/cover.png"),
+    image: absoluteUrl(input.image ?? "/og/cover.png"),
     inLanguage: "en-IN",
   };
 }

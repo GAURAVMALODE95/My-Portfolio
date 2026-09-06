@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FadeUp, MaskedLines, SectionLabel } from "@/components/motion/Reveal";
 import { usePageTransition } from "@/components/ux/PageTransition";
-import { PROJECTS, type Project } from "@/data/projects";
+import { isFramedDevice, PROJECTS, type Project } from "@/data/projects";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }) {
@@ -53,7 +53,9 @@ function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }
           className={
             project.mockup === "framed-phones"
               ? "mx-auto max-h-80 w-auto object-contain"
-              : "aspect-[16/10] w-full border border-hairline object-cover"
+              : project.mockup === "framed-laptops"
+                ? "mx-auto w-full object-contain"
+                : "aspect-[16/10] w-full border border-hairline object-cover"
           }
         />
         <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-sub">
@@ -196,7 +198,7 @@ function Preview({ hover }: { hover: number | null }) {
               decoding="async"
               draggable={false}
               className={`gm-work-preview-img absolute inset-0 h-full w-full ${
-                p.mockup === "framed-phones" ? "object-contain p-5" : "object-cover"
+                isFramedDevice(p.mockup) ? "object-contain p-5" : "object-cover"
               }`}
               style={{ opacity: 0, transform: "scale(1.08)" }}
             />

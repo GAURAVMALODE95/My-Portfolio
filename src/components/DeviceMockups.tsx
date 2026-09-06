@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { EASE } from "@/components/motion/Reveal";
 
-/** Device PNGs that already include iPhone chrome — do not wrap in IPhoneFrame. */
+/** Device PNGs that already include phone or laptop chrome — do not wrap in IPhoneFrame / DesktopFrame. */
 export function FramedDeviceImg({
   src,
   alt,
@@ -20,7 +20,7 @@ export function FramedDeviceImg({
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       draggable={false}
-      className={`relative z-[2] h-auto w-full select-none bg-transparent drop-shadow-[0_22px_40px_rgba(0,0,0,0.22)] ${className}`}
+      className={`relative z-[2] h-auto w-full object-contain select-none bg-transparent ${className}`}
     />
   );
 }
