@@ -76,50 +76,66 @@ function PhoneGallery({
       </div>
 
       <div className="lg:hidden" data-testid="phone-gallery-mobile">
-        <div className="flex items-center justify-center gap-4 px-4 py-10">
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            aria-label="Previous screen"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-hairline text-faint transition-colors hover:border-ink hover:text-ink"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
+        <div className="relative px-5 py-8">
           <FramedDeviceImg
             key={current.src}
             src={current.src}
             alt={current.alt}
             priority
-            className="w-full max-w-[260px]"
+            className="mx-auto w-full max-w-[280px]"
           />
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            aria-label="Previous screen"
+            className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-ink bg-canvas text-ink shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
           <button
             type="button"
             onClick={() => go(1)}
             aria-label="Next screen"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-hairline text-faint transition-colors hover:border-ink hover:text-ink"
+            className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-ink bg-canvas text-ink shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
           >
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-5 w-5" />
           </button>
         </div>
-        <div className="border-t border-hairline px-5 py-4">
-          <p className="text-center font-mono text-[11px] uppercase tracking-[0.22em] text-sub">
+        <div className="flex items-center justify-between gap-3 border-t border-hairline px-5 py-4">
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            aria-label="Previous screen"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-ink bg-canvas text-ink"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <p className="min-w-0 text-center font-mono text-[11px] uppercase tracking-[0.22em] text-sub">
             {String(index + 1).padStart(2, "0")} / {String(shots.length).padStart(2, "0")}
             {current.label ? ` — ${current.label}` : ""}
           </p>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-            {shots.map((shot, i) => (
-              <button
-                key={shot.src}
-                type="button"
-                onClick={() => setIndex(i)}
-                aria-label={shot.label ?? `Screen ${i + 1}`}
-                aria-current={i === index ? "true" : undefined}
-                className={`h-1.5 w-8 transition-colors ${
-                  i === index ? "bg-ink" : "bg-hairline hover:bg-faint"
-                }`}
-              />
-            ))}
-          </div>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            aria-label="Next screen"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-ink bg-canvas text-ink"
+          >
+            <ArrowRight className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-2 px-5 pb-5">
+          {shots.map((shot, i) => (
+            <button
+              key={shot.src}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={shot.label ?? `Screen ${i + 1}`}
+              aria-current={i === index ? "true" : undefined}
+              className={`h-1.5 w-8 transition-colors ${
+                i === index ? "bg-ink" : "bg-hairline hover:bg-faint"
+              }`}
+            />
+          ))}
         </div>
       </div>
     </div>
