@@ -1,7 +1,7 @@
 export const PROFILE = {
   name: "Gaurav Malode",
   role: "Software Developer",
-  company: "Autotropic Cloud Technologies",
+  company: "Infomanav — Autotropic Cloud Technologies",
   focus: ["Flutter", "React Native", "React", "Node.js", "FastAPI"],
   tagline: "SOFTWARE ENGINEER / FINTECH / MOBILE",
   location: "Nashik, India",
@@ -49,9 +49,10 @@ export const CAPABILITIES: CapabilityCategory[] = [
       "iOS/Android build & release",
       "SSL pinning",
       "RASP",
+      "AES-GCM",
     ],
-    note: "Cross-platform apps shipped to the App Store, Google Play, and enterprise desktop — hardened with SSL pinning and runtime protections.",
-    related: ["Musaffa", "MyBuddy", "Infomanav Terminal", "Stolity"],
+    note: "Cross-platform apps shipped to the App Store, Google Play, and enterprise desktop — hardened with SSL pinning, AES-GCM, and runtime protections.",
+    related: ["Musaffa", "HDFC MyBuddy", "HDFC CasaGuru", "Stock Terminal", "Stolity"],
   },
   {
     id: "web-backend",
@@ -66,14 +67,14 @@ export const CAPABILITIES: CapabilityCategory[] = [
       "Storage",
     ],
     note: "REST APIs and web products in Node.js, FastAPI, and React, backed by Firebase Auth, Firestore, and Storage.",
-    related: ["Infomanav Terminal", "Stolity", "ResumeForge"],
+    related: ["Stock Terminal", "Stolity"],
   },
   {
     id: "languages",
     label: "Languages",
     tags: ["Dart", "Python", "JavaScript", "TypeScript", "SQL"],
     note: "Polyglot by necessity — Dart for Flutter, TypeScript for product web, Python for FastAPI services, SQL for data.",
-    related: ["Musaffa", "Infomanav Terminal", "Stolity", "ResumeForge"],
+    related: ["Musaffa", "Stock Terminal", "Stolity"],
   },
   {
     id: "architecture",
@@ -85,7 +86,7 @@ export const CAPABILITIES: CapabilityCategory[] = [
       "Reusable component design",
     ],
     note: "Clean Architecture and SOLID keep regulated fintech codebases testable and safe to change under release pressure.",
-    related: ["Musaffa", "MyBuddy", "Infomanav Terminal", "Stolity"],
+    related: ["Musaffa", "HDFC MyBuddy", "HDFC CasaGuru", "Stock Terminal", "Stolity"],
   },
   {
     id: "data-infra",
@@ -100,7 +101,7 @@ export const CAPABILITIES: CapabilityCategory[] = [
       "RevenueCat",
     ],
     note: "Market-data plumbing: Finnhub with TTL caching, Typesense search, WebSocket live prices, Syncfusion charting, JWT auth, and feature flags — plus RevenueCat entitlements on Stolity.",
-    related: ["Musaffa", "Infomanav Terminal", "Stolity"],
+    related: ["Musaffa", "Stock Terminal", "Stolity"],
   },
   {
     id: "toolkit",
@@ -115,7 +116,7 @@ export const CAPABILITIES: CapabilityCategory[] = [
       "Cursor",
     ],
     note: "Everyday flow with Git, Jira, Figma, and Postman — plus Charles Proxy and JADX for VAPT remediation, and Cursor for AI-assisted work.",
-    related: ["MyBuddy", "ResumeForge"],
+    related: ["HDFC MyBuddy"],
   },
 ];
 
@@ -142,20 +143,13 @@ export const TIMELINE: TimelineItem[] = [
     id: "autotropic",
     period: "DEC 2024 — PRESENT",
     title: "Software Developer",
-    org: "Autotropic Cloud Technologies Pvt. Ltd.",
+    org: "Infomanav — Autotropic Cloud Technologies",
     detail:
-      "Shipping production Flutter and React Native apps in fintech and enterprise banking on a globally distributed team — core product modules, mobile security controls, and release ownership.",
-    tags: ["Flutter", "React Native", "Fintech"],
+      "Shipping production Flutter and React Native apps on a globally distributed team — Musaffa (1.4M+ downloads), HDFC MyBuddy security and VAPT across five business units, HDFC CasaGuru CASA learning on Android, a Flutter desktop Stock Terminal, and the Stolity file app.",
+    tags: ["Musaffa", "HDFC MyBuddy", "HDFC CasaGuru", "Stock Terminal", "Stolity"],
   },
-  {
-    id: "production-fintech",
-    period: "2024 — PRESENT",
-    title: "Production fintech & enterprise mobile work",
-    org: "Musaffa · MyBuddy · Infomanav Terminal · Stolity",
-    detail:
-      "Core modules for a 1.4M+-download halal investing app, security hardening and VAPT remediation for HDFC enterprise banking across five business units, a Flutter desktop market terminal for macOS and Windows, and the Stolity React Native file app.",
-    tags: ["1.4M+ downloads", "5 banking units", "Desktop"],
-  },
+  // Hidden for now — uncomment with the ResumeForge case study.
+  /*
   {
     id: "resumeforge",
     period: "AUG 2026 — PRESENT",
@@ -165,4 +159,5 @@ export const TIMELINE: TimelineItem[] = [
       "A full-stack AI product — FastAPI, React, Firebase, and Groq LLM — that tailors resumes to job descriptions with a Cursor-style accept/reject review flow and server-side DOCX-to-PDF export.",
     tags: ["FastAPI", "React", "Groq LLM"],
   },
+  */
 ];

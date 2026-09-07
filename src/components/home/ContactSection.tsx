@@ -1,4 +1,13 @@
-import { ArrowUpRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  FileDown,
+  Github,
+  Globe,
+  Linkedin,
+  Mail,
+  Phone,
+  type LucideIcon,
+} from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { FadeUp, MaskedLines, SectionLabel } from "@/components/motion/Reveal";
@@ -32,12 +41,54 @@ function FieldError({ id, text }: { id: string; text?: string }) {
   );
 }
 
-const CHANNELS = [
-  { label: "Email", value: PROFILE.email, href: `mailto:${PROFILE.email}`, testid: "contact-email-link" },
-  { label: "LinkedIn", value: "in/gauravmalode7", href: PROFILE.linkedin, testid: "contact-linkedin-link" },
-  { label: "GitHub", value: "gauravmalode95", href: PROFILE.github, testid: "contact-github-link" },
-  { label: "Website", value: "gauravmalode.in", href: PROFILE.website, testid: "contact-website-link" },
-  { label: "Phone", value: PROFILE.phoneDisplay, href: `tel:${PROFILE.phone}`, testid: "contact-phone-link" },
+const CHANNELS: {
+  label: string;
+  value: string;
+  href: string;
+  testid: string;
+  icon: LucideIcon;
+  iconClass: string;
+}[] = [
+  {
+    label: "Email",
+    value: PROFILE.email,
+    href: `mailto:${PROFILE.email}`,
+    testid: "contact-email-link",
+    icon: Mail,
+    iconClass: "text-[#EA4335]",
+  },
+  {
+    label: "LinkedIn",
+    value: "in/gauravmalode7",
+    href: PROFILE.linkedin,
+    testid: "contact-linkedin-link",
+    icon: Linkedin,
+    iconClass: "text-[#0A66C2]",
+  },
+  {
+    label: "GitHub",
+    value: "gauravmalode95",
+    href: PROFILE.github,
+    testid: "contact-github-link",
+    icon: Github,
+    iconClass: "text-[#181717] dark:text-[#f0f6fc]",
+  },
+  {
+    label: "Website",
+    value: "gauravmalode.in",
+    href: PROFILE.website,
+    testid: "contact-website-link",
+    icon: Globe,
+    iconClass: "text-[#2563EB]",
+  },
+  {
+    label: "Phone",
+    value: PROFILE.phoneDisplay,
+    href: `tel:${PROFILE.phone}`,
+    testid: "contact-phone-link",
+    icon: Phone,
+    iconClass: "text-[#16A34A]",
+  },
 ];
 
 export function ContactSection() {
@@ -206,7 +257,7 @@ export function ContactSection() {
                       ? "Email client opened — press send there to deliver."
                       : status === "error"
                         ? "Send failed — please email me directly."
-                        : "Replies within a day or two"}
+                        : "Replies within few hours."}
                   </p>
                 </div>
                 {status === "mailto" && (
@@ -222,29 +273,40 @@ export function ContactSection() {
           <FadeUp className="lg:col-span-4 lg:col-start-9" delay={0.15}>
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint">Direct channels</p>
             <ul className="mt-5 border-t border-hairline">
-              {CHANNELS.map((l) => (
-                <li key={l.label} className="border-b border-hairline">
-                  <a
-                    href={l.href}
-                    data-testid={l.testid}
-                    target={l.href.startsWith("http") ? "_blank" : undefined}
-                    rel={
-                      l.href.startsWith("http")
-                        ? l.label === "LinkedIn" || l.label === "GitHub"
-                          ? "me noopener noreferrer"
-                          : "noopener noreferrer"
-                        : undefined
-                    }
-                    className="group flex items-center justify-between gap-4 py-4 transition-colors hover:text-ink"
-                  >
-                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">{l.label}</span>
-                    <span className="flex items-center gap-3 text-sm text-sub transition-colors group-hover:text-ink">
-                      {l.value}
-                      <ArrowUpRight className="h-3.5 w-3.5 text-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal" aria-hidden="true" />
-                    </span>
-                  </a>
-                </li>
-              ))}
+              {CHANNELS.map((l) => {
+                const Icon = l.icon;
+                return (
+                  <li key={l.label} className="border-b border-hairline">
+                    <a
+                      href={l.href}
+                      data-testid={l.testid}
+                      target={l.href.startsWith("http") ? "_blank" : undefined}
+                      rel={
+                        l.href.startsWith("http")
+                          ? l.label === "LinkedIn" || l.label === "GitHub"
+                            ? "me noopener noreferrer"
+                            : "noopener noreferrer"
+                          : undefined
+                      }
+                      className="group flex items-center justify-between gap-4 py-4 transition-colors hover:text-ink"
+                    >
+                      <span className="flex min-w-0 items-center gap-3">
+                        <Icon
+                          className={`h-4 w-4 shrink-0 ${l.iconClass}`}
+                          aria-hidden="true"
+                        />
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
+                          {l.label}
+                        </span>
+                      </span>
+                      <span className="flex min-w-0 items-center gap-3 text-sm text-sub transition-colors group-hover:text-ink">
+                        <span className="truncate">{l.value}</span>
+                        <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal" aria-hidden="true" />
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
             <a
               href={PROFILE.resumePath}
@@ -252,7 +314,10 @@ export function ContactSection() {
               data-testid="contact-resume-download"
               className="group mt-8 flex items-center justify-between border border-hairline px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-sub transition-colors hover:border-ink hover:text-ink"
             >
-              Download resume (PDF)
+              <span className="flex items-center gap-3">
+                <FileDown className="h-4 w-4 text-[#E5252C]" aria-hidden="true" />
+                Download resume (PDF)
+              </span>
               <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
             </a>
           </FadeUp>

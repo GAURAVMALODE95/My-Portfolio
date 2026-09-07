@@ -35,8 +35,12 @@ function WorkRow({ project, onEnter }: { project: Project; onEnter: () => void }
         {project.platforms.slice(0, 2).join(" · ")}
       </span>
       <span className="flex min-w-0 items-center justify-end gap-4 lg:col-span-2">
-        <span className="hidden min-w-0 truncate font-mono text-[11px] uppercase tracking-[0.2em] text-sub lg:inline">
-          {project.stack.slice(0, 2).join(" · ")}
+        <span className="hidden min-w-0 text-right font-mono text-[11px] uppercase leading-[1.45] tracking-[0.2em] text-sub lg:block">
+          {project.stack.slice(0, 2).map((item) => (
+            <span key={item} className="block">
+              {item}
+            </span>
+          ))}
         </span>
         <ArrowUpRight
           className="h-4 w-4 shrink-0 text-faint transition-all duration-500 ease-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
@@ -229,9 +233,8 @@ export function WorkGallery() {
           </h2>
           <FadeUp delay={0.2} className="lg:col-span-4">
             <p className="max-w-sm text-sm leading-relaxed text-sub">
-              Halal investing at global scale, enterprise banking security, a
-              desktop market terminal, a consumer file app, and an AI SaaS built
-              end-to-end.
+              Halal investing at global scale, employee banking apps, a
+              desktop market terminal, and a consumer file app.
             </p>
           </FadeUp>
         </div>

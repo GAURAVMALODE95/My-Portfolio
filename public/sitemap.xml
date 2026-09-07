@@ -16,17 +16,17 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://gauravmalode.in/work/casaguru</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://gauravmalode.in/work/infomanav-terminal</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://gauravmalode.in/work/stolity</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gauravmalode.in/work/resumeforge</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

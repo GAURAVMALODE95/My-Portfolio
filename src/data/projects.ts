@@ -52,6 +52,13 @@ const STOLITY_IMG = {
   upgrade: "/Images/stolity/stolity_upgrade.png?v=1",
 };
 
+const CASAGURU_IMG = {
+  dashboard: "/Images/casaguru/casaguru_hdfc_casa_dashboard_screen.png?v=1",
+  currentAccount: "/Images/casaguru/casaguru_hdfc_current_account_list_screen.png?v=1",
+  features: "/Images/casaguru/casaguru_hdfc_product_features_screen.png?v=1",
+  faqs: "/Images/casaguru/casaguru_hdfc_faqs_list_screen.png?v=1",
+};
+
 export interface CaseBlock {
   title: string;
   body: string;
@@ -191,13 +198,14 @@ export const PROJECTS: Project[] = [
   {
     slug: "mybuddy",
     index: "02",
-    product: "MyBuddy",
-    title: "MyBuddy — HDFC Enterprise Banking",
+    product: "HDFC MyBuddy",
+    title: "HDFC MyBuddy — Enterprise Banking",
     domain: "ENTERPRISE BANKING / SECURITY",
     platforms: ["React Native", "iOS", "Android"],
     stack: [
       "React Native",
       "TypeScript",
+      "AES-GCM",
       "SSL pinning",
       "RASP",
       "Charles Proxy",
@@ -206,16 +214,16 @@ export const PROJECTS: Project[] = [
     role: "Software Developer — workflows, security, release readiness",
     timeframe: "Dec 2024 — Present",
     impact:
-      "Critical enterprise banking workflows and mobile security hardening across five HDFC business units.",
-    cardOutcome: "5 business units · VAPT remediation closed for release",
+      "Critical enterprise banking workflows and mobile security hardening across five business units.",
+    cardOutcome: "5 business units · AES-GCM · VAPT closed for release",
     mockup: "framed-phones",
     frameTitle: "MyBuddy — HNW Dashboard",
     images: { primary: MYBUDDY_IMG.dashboard, secondary: MYBUDDY_IMG.scorecard },
     imageAlts: {
       primary:
-        "MyBuddy HDFC HNW dashboard — My Bank My Power shortcuts and latest news",
+        "MyBuddy HNW dashboard — My Bank My Power shortcuts and latest news",
       secondary:
-        "MyBuddy HDFC HNW MTD scorecard — income plan and achievement",
+        "MyBuddy HNW MTD scorecard — income plan and achievement",
     },
     gallery: [
       {
@@ -227,7 +235,7 @@ export const PROJECTS: Project[] = [
       {
         src: MYBUDDY_IMG.dashboard,
         title: "MyBuddy — HNW Dashboard",
-        alt: "MyBuddy HDFC HNW dashboard with score, PLP eligibility, and process shortcuts",
+        alt: "MyBuddy HNW dashboard with score, PLP eligibility, and process shortcuts",
         label: "Dashboard",
       },
       {
@@ -250,8 +258,8 @@ export const PROJECTS: Project[] = [
       },
     ],
     overview: [
-      "MyBuddy is HDFC's enterprise banking app, supporting critical operational workflows across five business units: HNW, BSO, CA, EBFS, and S2S.",
-      "I engineer and maintain cross-platform React Native workflows, and own the mobile security posture: hardening the app against man-in-the-middle and reverse-engineering attacks, and closing third-party VAPT findings so releases can ship after independent penetration testing.",
+      "MyBuddy is an enterprise banking app, supporting critical operational workflows across five business units: HNW, BSO, CA, EBFS, and S2S.",
+      "I engineer and maintain cross-platform React Native workflows, and own the mobile security posture: migrating on-device encryption from AES-CBC-256 to AES-GCM, hardening the app against man-in-the-middle and reverse-engineering attacks, and closing third-party VAPT findings so releases can ship after independent penetration testing.",
     ],
     scope: [
       {
@@ -261,6 +269,10 @@ export const PROJECTS: Project[] = [
       {
         title: "Mobile security controls",
         body: "Architected high-level protections — dynamic SSL pinning, Frida detection, and jailbreak/root detection — hardening the app against MITM and reverse-engineering attacks.",
+      },
+      {
+        title: "AES-CBC-256 → AES-GCM",
+        body: "Migrated on-device encryption from AES-256-CBC to AES-256-GCM. CBC only hides bytes; GCM is authenticated encryption, so a tampered payload fails the tag instead of decrypting into silent garbage — the difference that matters in a banking app.",
       },
       {
         title: "VAPT remediation",
@@ -277,6 +289,10 @@ export const PROJECTS: Project[] = [
         body: "Dynamic SSL pinning blocks intercepted traffic even if a certificate store is compromised; Frida and jailbreak/root detection stop instrumentation and tampering at runtime. Together they raise the cost of attacking the app well above opportunistic levels.",
       },
       {
+        title: "Why CBC was the wrong primitive",
+        body: "AES-256-CBC gives confidentiality and nothing else. Integrity is a separate MAC you have to get right — encrypt-then-MAC, unique IVs, no padding leaks. Miss any of that and ciphertext can be mutated without the app noticing. AES-GCM is AEAD: one 256-bit key, a unique nonce per encryption, and a Galois tag that fails closed on tamper. I moved MyBuddy's on-device crypto to GCM on both iOS and Android, using platform keystore APIs, then re-tested so existing sessions still opened and VAPT treated the finding as closed.",
+      },
+      {
         title: "Closing VAPT findings systematically",
         body: "Each finding was reproduced with Charles Proxy (traffic) and JADX (decompiled code), fixed at the root, and re-tested — turning an external audit report into a closed checklist the release could depend on.",
       },
@@ -286,9 +302,9 @@ export const PROJECTS: Project[] = [
       },
     ],
     outcomes: [
-      { display: "5", countTo: 5, label: "HDFC business units supported" },
+      { display: "5", countTo: 5, label: "Business units supported" },
+      { display: "AES-GCM", label: "Authenticated encryption replacing AES-CBC-256" },
       { display: "VAPT", label: "Third-party findings closed for release" },
-      { display: "2", countTo: 2, label: "Platforms under release ownership" },
     ],
     qualitativeOutcome:
       "The app shipped on schedule after independent penetration testing, with security controls and workflow stability treating banking-grade trust as a release requirement.",
@@ -296,10 +312,128 @@ export const PROJECTS: Project[] = [
       "Security work is product work. A finding closed with Charles Proxy and JADX is invisible to users — and that invisibility is exactly the point.",
   },
   {
-    slug: "infomanav-terminal",
+    slug: "casaguru",
     index: "03",
-    product: "Infomanav Terminal",
-    title: "Infomanav Terminal — Stocks & ETF Research",
+    product: "HDFC CasaGuru",
+    title: "HDFC CasaGuru — CASA Learning App",
+    domain: "ENTERPRISE BANKING / ENABLEMENT",
+    platforms: ["React Native", "Android"],
+    stack: [
+      "React Native",
+      "Redux",
+      "Firebase Analytics",
+      "react-native-pdf",
+      "AES-256-CBC",
+      "REST APIs",
+    ],
+    role: "Software Developer — React Native (Android)",
+    timeframe: "2024 — Present",
+    impact:
+      "An employee learning app for CASA and liability products — in-app documents, deep links, and analytics on Android.",
+    cardOutcome: "In-app PDFs · deep links · Firebase Analytics",
+    mockup: "framed-phones",
+    frameTitle: "CasaGuru — Dashboard",
+    images: { primary: CASAGURU_IMG.dashboard, secondary: CASAGURU_IMG.currentAccount },
+    imageAlts: {
+      primary: "CasaGuru CASA Guru dashboard with Current Account, FD, NRI, and PPF learning tiles",
+      secondary: "CasaGuru Current Account nested list — generic, segmented, and special-purpose accounts",
+    },
+    gallery: [
+      {
+        src: CASAGURU_IMG.dashboard,
+        title: "CasaGuru — Dashboard",
+        alt: "CasaGuru dashboard — CASA learning tiles for savings, current, FD, NRI, and PPF",
+        label: "Dashboard",
+      },
+      {
+        src: CASAGURU_IMG.currentAccount,
+        title: "CasaGuru — Current Account",
+        alt: "CasaGuru Current Account details list with document links for each account type",
+        label: "Current Account",
+      },
+      {
+        src: CASAGURU_IMG.features,
+        title: "CasaGuru — Product Features",
+        alt: "CasaGuru Max Advantage Current Account features, AQB, and charges for employees",
+        label: "Product features",
+      },
+      {
+        src: CASAGURU_IMG.faqs,
+        title: "CasaGuru — FAQs",
+        alt: "CasaGuru FAQ list with document links for CASA product questions",
+        label: "FAQs",
+      },
+    ],
+    overview: [
+      "CasaGuru (CASA Guru) is an employee knowledge app — not a retail banking client. Frontline staff look up Current Accounts, FDs, NRI, PPF/Locker, and related liability products: documents, media, FAQs, and assessments on Android.",
+      "I own the React Native Android client work around how people actually get to that content: in-app PDF and image viewers, deep links into screens and documents, and Firebase Analytics on module usage. The dashboard tiles themselves come from the backend; the client routes them.",
+    ],
+    scope: [
+      {
+        title: "In-app PDF and image viewers",
+        body: "Employees open linked PDFs and images inside the app instead of bouncing to an external viewer — custom document and image surfaces so product notes stay in the learning flow.",
+      },
+      {
+        title: "Deep-link navigation",
+        body: "Built deep-link routes that land on a specific screen or business document from a notification, mailer, or content ID — instead of dumping everyone on the dashboard to hunt.",
+      },
+      {
+        title: "Firebase Analytics instrumentation",
+        body: "Instrumented Firebase Analytics events across CASA modules so stakeholders can see click-through and content consumption by feature — usage data, not a guess.",
+      },
+      {
+        title: "Metadata-driven dashboard",
+        body: "Dashboard tiles are API-driven. content_type and view_type decide whether a tap opens a nested list, a document path, a webview assistant, or an MCQ — without hardcoding every learning path in the client.",
+      },
+      {
+        title: "Encrypted API payloads",
+        body: "Request and response bodies go over HTTPS as AES-256-CBC ciphertext, not plaintext JSON — the contract the Android client speaks to the liability API.",
+      },
+      {
+        title: "MCQ knowledge checks",
+        body: "Dashboard tiles can open an in-app MCQ flow — select an answer, see correctness, score, and a results screen — so staff can self-check CASA knowledge without leaving the app.",
+      },
+    ],
+    build: [
+      {
+        title: "Documents that stay in the app",
+        body: "PDF rendering and download, plus image viewing, so a Current Account circular or FAQ pack opens in-place. Linked .pdf and related files do not depend on a third-party reader being installed.",
+      },
+      {
+        title: "Deep links into screens and files",
+        body: "Dynamic content IDs resolve to the right nested list, product-feature card, or document. A mailer or notification can send an employee to Max Advantage AQB rules, not the home grid.",
+      },
+      {
+        title: "Events that match the tiles",
+        body: "Firebase Analytics events fire on module taps and content opens so monthly click-through and consumption can be reported by feature — enablement analytics for staff, not a consumer-app vanity dashboard.",
+      },
+      {
+        title: "Tiles that route themselves",
+        body: "The home grid is a dashboardlist from the API. list goes to nested CASA topics; details + webview opens Ask Eva; details + default opens the MCQ flow. Adding a product on the backend does not require a new Android screen for every path.",
+      },
+      {
+        title: "AES-256-CBC on the wire",
+        body: "JSON is encrypted before fetch and decrypted after. Session tokens travel inside that envelope. Guest bootstrap uses device ID + platform; employee login is code or mobile plus a 4-digit PIN — staff access, not customer payments.",
+      },
+    ],
+    outcomes: [
+      { display: "Android", label: "React Native client I shipped on" },
+      { display: "PDF", label: "In-app document and image viewers" },
+      { display: "Deep links", label: "Routes into screens and business documents" },
+      { display: "Analytics", label: "Firebase events for module click-through" },
+      { display: "AES-CBC", label: "Encrypted API request and response bodies" },
+      { display: "Tiles", label: "Metadata-driven dashboard from the backend" },
+    ],
+    qualitativeOutcome:
+      "Bank staff get CASA product knowledge on the phone — documents, FAQs, and assessments — without turning CasaGuru into a payments or transfers app.",
+    lesson:
+      "An enablement app is judged by whether the PDF opens here, now. Viewers, deep links, and events are the product; the dashboard is just the index.",
+  },
+  {
+    slug: "infomanav-terminal",
+    index: "04",
+    product: "Stock Terminal",
+    title: "Stock Terminal — Stocks & ETF Research",
     domain: "MARKET DATA / DESKTOP",
     platforms: ["Flutter", "macOS", "Windows"],
     stack: [
@@ -317,48 +451,48 @@ export const PROJECTS: Project[] = [
       "A Flutter desktop market workstation for macOS and Windows, backed by purpose-built Node.js market-data APIs.",
     cardOutcome: "macOS + Windows · live prices · research, screeners, portfolios",
     mockup: "framed-laptops",
-    frameTitle: "Infomanav Terminal — Dashboard",
+    frameTitle: "Stock Terminal — Dashboard",
     images: { primary: TERMINAL_IMG.dashboard, secondary: TERMINAL_IMG.screener },
     imageAlts: {
       primary:
-        "Infomanav Terminal dashboard — live market indices, sector performance, and market charts",
+        "Stock Terminal dashboard — live market indices, sector performance, and market charts",
       secondary:
-        "Infomanav Terminal stock screener — fundamental filters and company results table",
+        "Stock Terminal stock screener — fundamental filters and company results table",
     },
     gallery: [
       {
         src: TERMINAL_IMG.dashboard,
-        title: "Infomanav Terminal — Dashboard",
-        alt: "Infomanav Terminal dashboard showing live market indices, sector performance, and a market chart",
+        title: "Stock Terminal — Dashboard",
+        alt: "Stock Terminal dashboard showing live market indices, sector performance, and a market chart",
         label: "Dashboard",
       },
       {
         src: TERMINAL_IMG.watchlist,
-        title: "Infomanav Terminal — Watchlist",
-        alt: "Infomanav Terminal watchlist with tracked stocks, performance charts, and Apple key stats",
+        title: "Stock Terminal — Watchlist",
+        alt: "Stock Terminal watchlist with tracked stocks, performance charts, and Apple key stats",
         label: "Watchlist",
       },
       {
         src: TERMINAL_IMG.screener,
-        title: "Infomanav Terminal — Stock Screener",
-        alt: "Infomanav Terminal stock screener with fundamental filters and a company results table",
+        title: "Stock Terminal — Stock Screener",
+        alt: "Stock Terminal stock screener with fundamental filters and a company results table",
         label: "Screener",
       },
       {
         src: TERMINAL_IMG.portfolio,
-        title: "Infomanav Terminal — Model Portfolio",
-        alt: "Infomanav Terminal model portfolio creator with holdings allocation and summary",
+        title: "Stock Terminal — Model Portfolio",
+        alt: "Stock Terminal model portfolio creator with holdings allocation and summary",
         label: "Portfolio",
       },
       {
         src: TERMINAL_IMG.business,
-        title: "Infomanav Terminal — Business Research",
-        alt: "Infomanav Terminal business research for Apple showing product mix and geography revenue",
+        title: "Stock Terminal — Business Research",
+        alt: "Stock Terminal business research for Apple showing product mix and geography revenue",
         label: "Business",
       },
     ],
     overview: [
-      "Infomanav Terminal is a Flutter desktop market workstation for macOS and Windows: live prices, stock and ETF research, screeners, watchlists, portfolios, earnings, and Shariah compliance in one surface.",
+      "Stock Terminal is a Flutter desktop market workstation for macOS and Windows: live prices, stock and ETF research, screeners, watchlists, portfolios, earnings, and Shariah compliance in one surface.",
       "I built the Flutter desktop client and designed the Node.js REST APIs behind it — JWT auth, per-user feature flags, watchlists, trading ideas, portfolios, and screener strategies.",
     ],
     scope: [
@@ -409,7 +543,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "stolity",
-    index: "04",
+    index: "05",
     product: "Stolity",
     title: "Stolity — File Management",
     domain: "PRODUCTIVITY / CLOUD STORAGE",
@@ -513,9 +647,11 @@ export const PROJECTS: Project[] = [
     lesson:
       "A file app is judged by the upload that almost failed. Chunks, retries, and background work are the product — the file list is just where you see that they worked.",
   },
+  // Hidden for now — uncomment to restore the case study.
+  /*
   {
     slug: "resumeforge",
-    index: "05",
+    index: "06",
     product: "ResumeForge",
     title: "ResumeForge — AI Resume Tailoring SaaS",
     domain: "AI PRODUCT / FULL-STACK",
@@ -582,6 +718,7 @@ export const PROJECTS: Project[] = [
     lesson:
       "The hard part of AI products isn't the model call — it's giving users control over what the model touches. The diff review is the product.",
   },
+  */
 ];
 
 export function getProject(slug: string): Project | undefined {

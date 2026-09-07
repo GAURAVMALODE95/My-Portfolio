@@ -38,6 +38,7 @@ export function Hero() {
   return (
     <section
       ref={ref}
+      id="home"
       className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden pt-24 sm:pt-28"
       aria-label="Introduction"
     >
@@ -49,12 +50,10 @@ export function Hero() {
                 compact
                 delay={0.15}
                 lines={[
-                  <>Secure financial software -</>,
-                  <>
-                    from the{" "}
-                    <span className="italic font-medium text-signal">mobile screen</span>
-                  </>,
-                  <>to the market-data layer.</>,
+                  <>Building production</>,
+                  <>software for modern</>,
+                  <>banking, investing,</>,
+                  <>and fintech platforms.</>,
                 ]}
               />
             </h1>

@@ -16,6 +16,7 @@ import { PROFILE } from "@/data/site";
 import { scrollToId } from "@/lib/lenis";
 
 const LINKS = [
+  { id: "home", label: "Home" },
   { id: "work", label: "Work" },
   { id: "experience", label: "Experience" },
   { id: "capabilities", label: "Capabilities" },
@@ -41,28 +42,38 @@ export function Nav() {
   const reduce = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
+  const [activeSection, setActiveSection] = useState("home");
   const [hovered, setHovered] = useState("");
   const firstMobileLink = useRef<HTMLButtonElement>(null);
   const { scrollY } = useScroll();
 
-  useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
+  useMotionValueEvent(scrollY, "change", (v) => {
+    setScrolled(v > 24);
+    if (location.pathname !== "/") return;
+    const probe = window.innerHeight * 0.28;
+    let current = "home";
+    for (const { id } of LINKS) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      if (el.getBoundingClientRect().top <= probe) current = id;
+    }
+    setActiveSection((prev) => (prev === current ? prev : current));
+  });
 
   useEffect(() => {
     if (location.pathname !== "/") {
       setActiveSection("");
       return;
     }
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setActiveSection(e.target.id)),
-      { rootMargin: "-40% 0px -55% 0px" },
-    );
-    LINKS.forEach((l) => {
-      const el = document.getElementById(l.id);
-      if (el) obs.observe(el);
-    });
-    return () => obs.disconnect();
-  }, [location.pathname]);
+    const probe = window.innerHeight * 0.28;
+    let current = "home";
+    for (const { id } of LINKS) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      if (el.getBoundingClientRect().top <= probe) current = id;
+    }
+    setActiveSection(current);
+  }, [location.pathname, location.hash]);
 
   useEffect(() => setOpen(false), [location.pathname, location.hash]);
 
@@ -82,6 +93,11 @@ export function Nav() {
     setOpen(false);
     const dest = LINKS.find((l) => l.id === id)?.label ?? id;
     runTransition(() => {
+      if (id === "home") {
+        if (location.pathname !== "/") navigate("/");
+        else scrollToId("home", 0);
+        return;
+      }
       if (location.pathname !== "/") navigate(`/#${id}`);
       else scrollToId(id, -80);
     }, dest);

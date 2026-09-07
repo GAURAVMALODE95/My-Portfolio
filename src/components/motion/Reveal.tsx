@@ -32,7 +32,7 @@ export function MaskedLines({
           key={i}
           className={
             compact
-              ? "block overflow-hidden"
+              ? "block overflow-hidden pb-[0.12em]"
               : "block overflow-hidden py-[0.2em] -my-[0.05em]"
           }
         >

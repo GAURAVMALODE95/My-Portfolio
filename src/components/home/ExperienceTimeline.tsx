@@ -183,7 +183,7 @@ export function ExperienceTimeline() {
           <FadeUp delay={0.2} className="lg:col-span-4">
             <p className="max-w-sm text-sm leading-relaxed text-sub">
               From an AI & data-science degree to production fintech,
-              enterprise banking, desktop market software, and a solo AI SaaS.
+              enterprise banking, and desktop market software.
             </p>
           </FadeUp>
         </div>
