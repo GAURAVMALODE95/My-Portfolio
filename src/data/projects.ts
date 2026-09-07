@@ -29,6 +29,14 @@ const MUSAFFA_IMG = {
   investments: "/Images/Musaffa/musaffa_my_investments_screen.png?v=2",
 };
 
+const MYBUDDY_IMG = {
+  login: "/Images/mybuddy/mybuddy_hdfc_hnw_login_screen.png?v=1",
+  dashboard: "/Images/mybuddy/mybuddy_hdfc_hnw_dashboard_screen.png?v=1",
+  employees: "/Images/mybuddy/mybuddy_hdfc_hnw_employee_list_screen.png?v=1",
+  eligibility: "/Images/mybuddy/mybuddy_hdfc_hnw_plp_eligibility_screen.png?v=1",
+  scorecard: "/Images/mybuddy/mybuddy_hdfc_hnw_mtd_scorecard_screen.png?v=1",
+};
+
 const TERMINAL_IMG = {
   dashboard: "/Images/terminal/Terminal__dashboard.png?v=1",
   watchlist: "/Images/terminal/Terminal_watchlist.png?v=1",
@@ -200,16 +208,47 @@ export const PROJECTS: Project[] = [
     impact:
       "Critical enterprise banking workflows and mobile security hardening across five HDFC business units.",
     cardOutcome: "5 business units · VAPT remediation closed for release",
-    mockup: "phone-desktop",
-    frameTitle: "mybuddy.internal",
-    images: { primary: IMG.mobile2, secondary: IMG.desktop1 },
+    mockup: "framed-phones",
+    frameTitle: "MyBuddy — HNW Dashboard",
+    images: { primary: MYBUDDY_IMG.dashboard, secondary: MYBUDDY_IMG.scorecard },
     imageAlts: {
       primary:
-        "Abstracted MyBuddy banking screen in an iPhone frame — placeholder visual",
+        "MyBuddy HDFC HNW dashboard — My Bank My Power shortcuts and latest news",
       secondary:
-        "Abstracted enterprise operations surface — placeholder visual",
+        "MyBuddy HDFC HNW MTD scorecard — income plan and achievement",
     },
-    nda: true,
+    gallery: [
+      {
+        src: MYBUDDY_IMG.login,
+        title: "MyBuddy — Select Your Team",
+        alt: "MyBuddy login — select HNW, Current Account, BSO, or Employee Banking team",
+        label: "Select team",
+      },
+      {
+        src: MYBUDDY_IMG.dashboard,
+        title: "MyBuddy — HNW Dashboard",
+        alt: "MyBuddy HDFC HNW dashboard with score, PLP eligibility, and process shortcuts",
+        label: "Dashboard",
+      },
+      {
+        src: MYBUDDY_IMG.employees,
+        title: "MyBuddy — Employee List",
+        alt: "MyBuddy HNW employee list with search and employee codes",
+        label: "Employees",
+      },
+      {
+        src: MYBUDDY_IMG.eligibility,
+        title: "MyBuddy — PLP Eligibility",
+        alt: "MyBuddy PLP eligibility report with YTD and MTD achievement",
+        label: "PLP eligibility",
+      },
+      {
+        src: MYBUDDY_IMG.scorecard,
+        title: "MyBuddy — MTD Scorecard",
+        alt: "MyBuddy MTD scorecard with total income plan and income split",
+        label: "Scorecard",
+      },
+    ],
     overview: [
       "MyBuddy is HDFC's enterprise banking app, supporting critical operational workflows across five business units: HNW, BSO, CA, EBFS, and S2S.",
       "I engineer and maintain cross-platform React Native workflows, and own the mobile security posture: hardening the app against man-in-the-middle and reverse-engineering attacks, and closing third-party VAPT findings so releases can ship after independent penetration testing.",
