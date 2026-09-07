@@ -7,6 +7,7 @@ import { FitText } from "@/components/ux/FitText";
 import { usePageTransition } from "@/components/ux/PageTransition";
 import { PROFILE } from "@/data/site";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { trackResumeDownload } from "@/lib/analytics";
 import { scrollToId } from "@/lib/lenis";
 
 function Meta({ label, value }: { label: string; value: string }) {
@@ -78,7 +79,14 @@ export function Hero() {
               >
                 Selected work
               </Cta>
-              <Cta testId="hero-cta-resume" icon={ArrowUpRight} variant="ghost" href={PROFILE.resumePath} download>
+              <Cta
+                testId="hero-cta-resume"
+                icon={ArrowUpRight}
+                variant="ghost"
+                href={PROFILE.resumePath}
+                download
+                onClick={() => trackResumeDownload("hero")}
+              >
                 Resume (PDF)
               </Cta>
             </motion.div>

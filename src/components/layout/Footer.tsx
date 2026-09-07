@@ -2,6 +2,7 @@ import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PROJECTS } from "@/data/projects";
 import { PROFILE } from "@/data/site";
+import { trackResumeDownload } from "@/lib/analytics";
 import { scrollToTop } from "@/lib/lenis";
 
 const CONNECT = [
@@ -26,6 +27,7 @@ export function Footer() {
               href={PROFILE.resumePath}
               download
               data-testid="footer-resume-download"
+              onClick={() => trackResumeDownload("footer")}
               className="group mt-8 inline-flex items-center gap-2 border border-hairline px-4 py-2.5 font-mono text-[11px] uppercase tracking-[0.18em] text-sub transition-colors hover:border-ink hover:text-ink"
             >
               Resume (PDF)

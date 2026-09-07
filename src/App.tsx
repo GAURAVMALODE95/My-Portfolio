@@ -8,6 +8,7 @@ import { EASE } from "@/components/motion/Reveal";
 import { Cursor } from "@/components/ux/Cursor";
 import { TransitionProvider, usePageTransition } from "@/components/ux/PageTransition";
 import { initLenis, scrollToTop } from "@/lib/lenis";
+import { trackPageView } from "@/lib/analytics";
 import CaseStudy from "@/pages/CaseStudy";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/NotFound";
@@ -18,6 +19,16 @@ function ScrollManager() {
     if (hash) return;
     scrollToTop(true);
   }, [pathname, hash]);
+  return null;
+}
+
+function Analytics() {
+  const { pathname, search } = useLocation();
+  useEffect(() => {
+    const path = `${pathname}${search}`;
+    const t = window.setTimeout(() => trackPageView(path, document.title), 0);
+    return () => window.clearTimeout(t);
+  }, [pathname, search]);
   return null;
 }
 
@@ -88,6 +99,7 @@ export default function App() {
         Skip to content
       </a>
       <ScrollManager />
+      <Analytics />
       <TransitionProvider>
         <Nav />
         <AnimatedRoutes />

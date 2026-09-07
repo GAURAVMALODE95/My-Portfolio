@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { FadeUp, MaskedLines, SectionLabel } from "@/components/motion/Reveal";
 import { Cta } from "@/components/ux/Cta";
 import { PROFILE } from "@/data/site";
+import { trackResumeDownload } from "@/lib/analytics";
 import { CONTACT_ENDPOINT } from "@/lib/site";
 
 const TOPICS = [
@@ -312,6 +313,7 @@ export function ContactSection() {
               href={PROFILE.resumePath}
               download
               data-testid="contact-resume-download"
+              onClick={() => trackResumeDownload("contact")}
               className="group mt-8 flex items-center justify-between border border-hairline px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-sub transition-colors hover:border-ink hover:text-ink"
             >
               <span className="flex items-center gap-3">

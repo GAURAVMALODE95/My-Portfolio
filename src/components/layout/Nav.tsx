@@ -14,6 +14,7 @@ import { ScrambleText } from "@/components/ux/ScrambleText";
 import { usePageTransition } from "@/components/ux/PageTransition";
 import { PROFILE } from "@/data/site";
 import { scrollToId } from "@/lib/lenis";
+import { trackResumeDownload } from "@/lib/analytics";
 
 const LINKS = [
   { id: "home", label: "Home" },
@@ -151,6 +152,7 @@ export function Nav() {
               href={PROFILE.resumePath}
               download
               data-testid="nav-resume-download"
+              onClick={() => trackResumeDownload("nav")}
               className="group hidden h-9 items-center gap-2 border border-hairline px-4 font-mono text-[11px] uppercase tracking-[0.18em] text-sub transition-colors hover:border-ink hover:text-ink sm:flex"
             >
               Resume
@@ -210,6 +212,7 @@ export function Nav() {
                   href={PROFILE.resumePath}
                   download
                   data-testid="nav-mobile-resume-download"
+                  onClick={() => trackResumeDownload("nav_mobile")}
                   className="flex items-center justify-between border border-ink bg-ink px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-canvas"
                 >
                   Download resume (PDF)
